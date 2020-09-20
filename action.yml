@@ -1,0 +1,21 @@
+name: 'Action ESLint'
+description: 'GitHub Action that runs ESLint on files changed in a Pull Request'
+author: 'sibiraj-s'
+
+branding:
+  icon: 'check-square'
+  color: 'green'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+
+inputs:
+  eslintArgs:
+    description: 'ESLint CLI flags'
+    required: false
+    default: ''
+  extensions:
+    description: 'Extensions to filter'
+    required: false
+    default: 'js'
