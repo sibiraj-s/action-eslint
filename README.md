@@ -2,6 +2,8 @@
 
 > GitHub Action that runs ESLint on files changed in a Pull Request.
 
+![Lint](https://github.com/sibiraj-s/action-eslint/workflows/Lint/badge.svg)
+
 ![Annotation](assets/annotation.png)
 
 ## Usage
