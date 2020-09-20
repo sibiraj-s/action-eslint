@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: '14'
       - run: npm ci # or yarn install
-      - uses: sibiraj-sr/action-eslint@v1
+      - uses: sibiraj-s/action-eslint@v1
         with:
           eslintArgs: '--ignore-path .gitignore --quite'
           extensions: 'js, jsx, ts, tsx'
