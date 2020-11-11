@@ -30,7 +30,7 @@ jobs:
       - run: npm ci # or yarn install
       - uses: sibiraj-s/action-eslint@v1
         with:
-          eslintArgs: '--ignore-path .gitignore --quite'
+          eslintArgs: '--ignore-path .gitignore --quiet'
           extensions: 'js, jsx, ts, tsx'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
