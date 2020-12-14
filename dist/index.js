@@ -6949,7 +6949,7 @@ const getChangedFiles = async (token) => {
         });
         const response = await octokit.paginate(options);
         const filesArr = response.map((data) => data.files);
-        const filesChangedInCommit = filesArr.reduce((acc, val) => acc.concat(val), []);
+        const filesChangedInCommit = filesArr.reduce((acc, val) => acc === null || acc === void 0 ? void 0 : acc.concat(val || []), []);
         files = getFiles(filesChangedInCommit);
     }
     else {

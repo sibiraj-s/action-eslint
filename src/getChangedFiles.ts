@@ -1,8 +1,8 @@
-import { getInput, debug } from '@actions/core'
-import { getOctokit, context } from '@actions/github'
-import { PullsListFilesResponseData, ReposGetCommitResponseData } from '@octokit/types'
+import { getInput, debug } from '@actions/core';
+import { getOctokit, context } from '@actions/github';
+import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 
-type FileList = string[]
+type FileList = string[];
 
 type File = {
   filename: string;
@@ -13,51 +13,53 @@ type File = {
   raw_url: string;
   blob_url: string;
   patch: string;
-}
+};
 
 const getFiles = (files: File[]): FileList => files
   .filter((file) => file.status !== 'removed')
-  .map((file) => file.filename)
+  .map((file) => file.filename);
 
 const getChangedFiles = async (token: string): Promise<FileList> => {
-  const octokit = getOctokit(token)
-  const pullRequest = context.payload.pull_request
+  const octokit = getOctokit(token);
+  const pullRequest = context.payload.pull_request;
 
-  let files: FileList
+  let files: FileList;
   if (!pullRequest?.number) {
     const options = octokit.repos.getCommit.endpoint.merge({
       owner: context.repo.owner,
       repo: context.repo.repo,
       ref: context.sha,
-    })
+    });
 
-    const response: ReposGetCommitResponseData[] = await octokit.paginate(options)
-    const filesArr = response.map((data) => data.files)
+    type ReposGetCommitResponseData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getCommit>;
+    const response: ReposGetCommitResponseData[] = await octokit.paginate(options);
+    const filesArr = response.map((data) => data.files);
 
-    const filesChangedInCommit = filesArr.reduce((acc, val) => acc.concat(val), [])
-    files = getFiles(filesChangedInCommit as File[])
+    const filesChangedInCommit = filesArr.reduce((acc, val) => acc?.concat(val || []), []);
+    files = getFiles(filesChangedInCommit as File[]);
   } else {
     const options = octokit.pulls.listFiles.endpoint.merge({
       owner: context.repo.owner,
       repo: context.repo.repo,
       pull_number: pullRequest.number,
-    })
+    });
 
-    const prResponse: PullsListFilesResponseData = await octokit.paginate(options)
-    files = getFiles(prResponse as File[])
+    type PullsListFilesResponseData = GetResponseDataTypeFromEndpointMethod<typeof octokit.pulls.listFiles>;
+    const prResponse: PullsListFilesResponseData = await octokit.paginate(options);
+    files = getFiles(prResponse as File[]);
   }
 
-  debug('Files changed...')
-  files.forEach(debug)
+  debug('Files changed...');
+  files.forEach(debug);
 
-  const supportedExtensions = getInput('extensions').split(',')
+  const supportedExtensions = getInput('extensions').split(',');
 
   const supportedFiles = files.filter((filename) => {
-    const isSupportedFile = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`))
-    return isSupportedFile
-  })
+    const isSupportedFile = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
+    return isSupportedFile;
+  });
 
-  return supportedFiles
-}
+  return supportedFiles;
+};
 
-export default getChangedFiles
+export default getChangedFiles;
