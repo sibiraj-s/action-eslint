@@ -16,8 +16,9 @@
   ],
   "main": "dist/index.js",
   "scripts": {
+    "dev": "ncc build src/index.ts -w",
     "build": "ncc build src/index.ts --license licenses.txt",
-    "lint": "eslint ."
+    "lint": "eslint --ext js,ts"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
@@ -26,14 +27,12 @@
     "@octokit/types": "^5.5.0"
   },
   "devDependencies": {
-    "@types/node": "^14.11.2",
-    "@typescript-eslint/eslint-plugin": "^4.3.0",
-    "@typescript-eslint/parser": "^4.3.0",
-    "@vercel/ncc": "^0.24.1",
-    "eslint": "^7.10.0",
-    "eslint-config-pegasus": "^1.3.9",
-    "husky": "^4.3.0",
-    "lint-staged": "^10.4.0",
-    "typescript": "^4.0.3"
+    "@types/node": "^14.14.13",
+    "@vercel/ncc": "^0.25.1",
+    "eslint": "^7.15.0",
+    "eslint-config-pegasus": "^2.0.0",
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3",
+    "typescript": "^4.1.3"
   }
 }

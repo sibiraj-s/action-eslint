@@ -1,12 +1,8 @@
 root: true
 
-parser: '@typescript-eslint/parser'
-
-plugins:
-  - '@typescript-eslint'
-
 extends:
-  - eslint:recommended
   - pegasus
   - pegasus/typescript
-  - plugin:@typescript-eslint/recommended
+
+parserOptions:
+  project: 'tsconfig.json'
