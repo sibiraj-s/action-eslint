@@ -14,6 +14,18 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v1.0.2 (2021-01-17)
+
+#### Dependency Updates
+
+- Update `@octokit/types` to v6 ([713dfcd](https://github.com/sibiraj-s/action-eslint/commit/713dfcd))
+- Update devDependencies ([534f79d](https://github.com/sibiraj-s/action-eslint/commit/534f79d)), ([153f0db](https://github.com/sibiraj-s/action-eslint/commit/153f0db))
+
+#### Internal
+
+- Update `@actions/setup-node` to v2 stable ([5522509](https://github.com/sibiraj-s/action-eslint/commit/5522509))
+- Update LICENSE ([ebbfc1f](https://github.com/sibiraj-s/action-eslint/commit/ebbfc1f))
+
 ## v1.0.1 (2020-10-02)
 
 #### Dependency Updates
