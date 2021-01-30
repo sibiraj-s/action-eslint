@@ -32,9 +32,16 @@ jobs:
         with:
           eslintArgs: '--ignore-path .gitignore --quiet'
           extensions: 'js, jsx, ts, tsx'
+          annotations: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+## Security
+
+For better security it is recommended to pin actions to a full length commit SHA.
+
+Read more on [using third-party actions](https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions)
 
 ## Known Issues
 
