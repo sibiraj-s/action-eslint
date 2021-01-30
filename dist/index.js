@@ -6998,6 +6998,12 @@ const run = async () => {
         if (!token) {
             return core_1.setFailed('GITHUB_TOKEN not found in environment variables.');
         }
+        const enableAnnotations = core_1.getInput('annotations') === 'true';
+        if (!enableAnnotations) {
+            core_1.debug('Disabling Annotations');
+            core_1.info('##[remove-matcher owner=eslint-compact]');
+            core_1.info('##[remove-matcher owner=eslint-stylish]');
+        }
         const files = await getChangedFiles_1.default(token);
         core_1.debug('Files for linting...');
         files.forEach(core_1.debug);
