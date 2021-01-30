@@ -14,6 +14,12 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v1.1.0 (2021-01-30)
+
+#### Features
+
+- Add option to disable annotations ([bb12546](https://github.com/sibiraj-s/action-eslint/commit/bb12546))
+
 ## v1.0.2 (2021-01-17)
 
 #### Dependency Updates
