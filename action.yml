@@ -19,3 +19,7 @@ inputs:
     description: 'Extensions to filter'
     required: false
     default: 'js'
+  annotations:
+    description: 'Enable or disable annotations'
+    required: false
+    default: true

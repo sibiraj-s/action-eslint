@@ -14,6 +14,13 @@ const run = async () => {
       return setFailed('GITHUB_TOKEN not found in environment variables.');
     }
 
+    const enableAnnotations = getInput('annotations') === 'true';
+    if (!enableAnnotations) {
+      debug('Disabling Annotations');
+      info('##[remove-matcher owner=eslint-compact]');
+      info('##[remove-matcher owner=eslint-stylish]');
+    }
+
     const files = await getChangedFiles(token);
 
     debug('Files for linting...');
