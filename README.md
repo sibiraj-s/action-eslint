@@ -31,13 +31,11 @@ jobs:
       - uses: sibiraj-s/action-eslint@v1
         with:
           eslintArgs: '--ignore-path .gitignore --quiet'
-          extensions: 'js,jsx,ts,tsx'
+          extensions: 'js, jsx, ts, tsx'
           annotations: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
-
-> **Note**: spaces are not allowed between extensions.
 
 ## Security
 
