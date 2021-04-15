@@ -52,7 +52,7 @@ const getChangedFiles = async (token: string): Promise<FileList> => {
   debug('Files changed...');
   files.forEach(debug);
 
-  const supportedExtensions = getInput('extensions').split(',');
+  const supportedExtensions = getInput('extensions').split(',').map((ext) => ext.trim());
 
   const supportedFiles = files.filter((filename) => {
     const isSupportedFile = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
