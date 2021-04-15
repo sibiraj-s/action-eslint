@@ -14,6 +14,18 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v1.1.1 (2021-04-15)
+
+#### Bug Fixes
+
+- Trim extensions input ([a0c220b](https://github.com/sibiraj-s/action-eslint/commit/a0c220b))
+
+#### Dependency Updates
+
+- Update `@actions/core` to v1.2.7 ([1b17160](https://github.com/sibiraj-s/action-eslint/commit/1b17160))
+- Update `@octokit/types` to v6.13.0 ([1b17160](https://github.com/sibiraj-s/action-eslint/commit/1b17160))
+- Update devDependencies ([1b17160](https://github.com/sibiraj-s/action-eslint/commit/1b17160))
+
 ## v1.1.0 (2021-01-30)
 
 #### Features
