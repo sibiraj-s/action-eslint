@@ -18,21 +18,23 @@
   "scripts": {
     "dev": "ncc build src/index.ts -w",
     "build": "ncc build src/index.ts --license licenses.txt",
-    "lint": "eslint --ext js,ts"
+    "lint": "eslint --ext js,ts",
+    "prepare": "is-ci || husky install"
   },
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.2.7",
     "@actions/exec": "^1.0.4",
     "@actions/github": "^4.0.0",
-    "@octokit/types": "^6.6.0"
+    "@octokit/types": "^6.13.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.22",
+    "@types/node": "^14.14.39",
     "@vercel/ncc": "^0.27.0",
-    "eslint": "^7.18.0",
+    "eslint": "^7.24.0",
     "eslint-config-pegasus": "^2.0.1",
-    "husky": "^4.3.8",
-    "lint-staged": "^10.5.3",
-    "typescript": "^4.1.3"
+    "husky": "^6.0.0",
+    "is-ci": "^3.0.0",
+    "lint-staged": "^10.5.4",
+    "typescript": "^4.2.4"
   }
 }

@@ -1,2 +1,0 @@
-hooks:
-  pre-commit: lint-staged && npm run build && git add dist/
