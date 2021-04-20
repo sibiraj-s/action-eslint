@@ -7158,11 +7158,11 @@ const run = async () => {
         if (files.length === 0) {
             return core_1.info('No files found. Skipping');
         }
-        const eslintArgs = core_1.getInput('eslintArgs');
+        const eslintArgs = core_1.getInput('eslintArgs').split(' ');
         await exec_1.exec('node', [
             path_1.default.join(process.cwd(), 'node_modules/eslint/bin/eslint'),
             ...files,
-            eslintArgs,
+            ...eslintArgs,
         ].filter(Boolean));
         return process.exit(0);
     }

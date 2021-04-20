@@ -30,12 +30,12 @@ const run = async () => {
       return info('No files found. Skipping');
     }
 
-    const eslintArgs = getInput('eslintArgs');
+    const eslintArgs = getInput('eslintArgs').split(' ');
 
     await exec('node', [
       path.join(process.cwd(), 'node_modules/eslint/bin/eslint'),
       ...files,
-      eslintArgs,
+      ...eslintArgs,
     ].filter(Boolean));
 
     return process.exit(0);

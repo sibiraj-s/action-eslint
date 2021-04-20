@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "ncc build src/index.ts -w",
     "build": "ncc build src/index.ts --license licenses.txt",
-    "lint": "eslint --ext js,ts",
+    "lint": "eslint . --ext js,ts",
     "prepare": "is-ci || husky install"
   },
   "dependencies": {
