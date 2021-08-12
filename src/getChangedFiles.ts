@@ -25,27 +25,27 @@ const getChangedFiles = async (token: string): Promise<FileList> => {
 
   let files: FileList;
   if (!pullRequest?.number) {
-    const options = octokit.repos.getCommit.endpoint.merge({
+    const options = octokit.rest.repos.getCommit.endpoint.merge({
       owner: context.repo.owner,
       repo: context.repo.repo,
       ref: context.sha,
     });
 
-    type ReposGetCommitResponseData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getCommit>;
-    const response: ReposGetCommitResponseData[] = await octokit.paginate(options);
+    type ReposGetCommitResponse = GetResponseDataTypeFromEndpointMethod<typeof octokit.rest.repos.getCommit>;
+    const response: ReposGetCommitResponse[] = await octokit.paginate(options);
     const filesArr = response.map((data) => data.files);
 
     const filesChangedInCommit = filesArr.reduce((acc, val) => acc?.concat(val || []), []);
     files = getFiles(filesChangedInCommit as File[]);
   } else {
-    const options = octokit.pulls.listFiles.endpoint.merge({
+    const options = octokit.rest.pulls.listFiles.endpoint.merge({
       owner: context.repo.owner,
       repo: context.repo.repo,
       pull_number: pullRequest.number,
     });
 
-    type PullsListFilesResponseData = GetResponseDataTypeFromEndpointMethod<typeof octokit.pulls.listFiles>;
-    const prResponse: PullsListFilesResponseData = await octokit.paginate(options);
+    type PullsListFilesResponse = GetResponseDataTypeFromEndpointMethod<typeof octokit.rest.pulls.listFiles>;
+    const prResponse: PullsListFilesResponse = await octokit.paginate(options);
     files = getFiles(prResponse as File[]);
   }
 
