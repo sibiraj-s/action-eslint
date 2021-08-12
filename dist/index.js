@@ -1,6 +1,102 @@
-module.exports =
-/******/ (() => { // webpackBootstrap
+require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
+
+/***/ 3577:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __nccwpck_require__(2186);
+const github_1 = __nccwpck_require__(5438);
+const getFiles = (files) => files
+    .filter((file) => file.status !== 'removed')
+    .map((file) => file.filename);
+const getChangedFiles = async (token) => {
+    const octokit = github_1.getOctokit(token);
+    const pullRequest = github_1.context.payload.pull_request;
+    let files;
+    if (!(pullRequest === null || pullRequest === void 0 ? void 0 : pullRequest.number)) {
+        const options = octokit.rest.repos.getCommit.endpoint.merge({
+            owner: github_1.context.repo.owner,
+            repo: github_1.context.repo.repo,
+            ref: github_1.context.sha,
+        });
+        const response = await octokit.paginate(options);
+        const filesArr = response.map((data) => data.files);
+        const filesChangedInCommit = filesArr.reduce((acc, val) => acc === null || acc === void 0 ? void 0 : acc.concat(val || []), []);
+        files = getFiles(filesChangedInCommit);
+    }
+    else {
+        const options = octokit.rest.pulls.listFiles.endpoint.merge({
+            owner: github_1.context.repo.owner,
+            repo: github_1.context.repo.repo,
+            pull_number: pullRequest.number,
+        });
+        const prResponse = await octokit.paginate(options);
+        files = getFiles(prResponse);
+    }
+    core_1.debug('Files changed...');
+    files.forEach(core_1.debug);
+    const supportedExtensions = core_1.getInput('extensions').split(',').map((ext) => ext.trim());
+    const supportedFiles = files.filter((filename) => {
+        const isSupportedFile = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
+        return isSupportedFile;
+    });
+    return supportedFiles;
+};
+exports.default = getChangedFiles;
+
+
+/***/ }),
+
+/***/ 3109:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const path_1 = __importDefault(__nccwpck_require__(5622));
+const core_1 = __nccwpck_require__(2186);
+const exec_1 = __nccwpck_require__(1514);
+const getChangedFiles_1 = __importDefault(__nccwpck_require__(3577));
+const run = async () => {
+    try {
+        const token = process.env.GITHUB_TOKEN;
+        if (!token) {
+            return core_1.setFailed('GITHUB_TOKEN not found in environment variables.');
+        }
+        const enableAnnotations = core_1.getBooleanInput('annotations');
+        if (!enableAnnotations) {
+            core_1.debug('Disabling Annotations');
+            core_1.info('##[remove-matcher owner=eslint-compact]');
+            core_1.info('##[remove-matcher owner=eslint-stylish]');
+        }
+        const files = await getChangedFiles_1.default(token);
+        core_1.debug('Files for linting...');
+        files.forEach(core_1.debug);
+        if (files.length === 0) {
+            return core_1.info('No files found. Skipping');
+        }
+        const eslintArgs = core_1.getInput('eslintArgs').split(' ');
+        await exec_1.exec('node', [
+            path_1.default.join(process.cwd(), 'node_modules/eslint/bin/eslint'),
+            ...files,
+            ...eslintArgs,
+        ].filter(Boolean));
+        return process.exit(0);
+    }
+    catch (err) {
+        return core_1.setFailed(err.message);
+    }
+};
+run();
+
+
+/***/ }),
 
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
@@ -7274,103 +7370,6 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 6907:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __nccwpck_require__(2186);
-const github_1 = __nccwpck_require__(5438);
-const getFiles = (files) => files
-    .filter((file) => file.status !== 'removed')
-    .map((file) => file.filename);
-const getChangedFiles = async (token) => {
-    const octokit = github_1.getOctokit(token);
-    const pullRequest = github_1.context.payload.pull_request;
-    let files;
-    if (!(pullRequest === null || pullRequest === void 0 ? void 0 : pullRequest.number)) {
-        const options = octokit.rest.repos.getCommit.endpoint.merge({
-            owner: github_1.context.repo.owner,
-            repo: github_1.context.repo.repo,
-            ref: github_1.context.sha,
-        });
-        const response = await octokit.paginate(options);
-        const filesArr = response.map((data) => data.files);
-        const filesChangedInCommit = filesArr.reduce((acc, val) => acc === null || acc === void 0 ? void 0 : acc.concat(val || []), []);
-        files = getFiles(filesChangedInCommit);
-    }
-    else {
-        const options = octokit.rest.pulls.listFiles.endpoint.merge({
-            owner: github_1.context.repo.owner,
-            repo: github_1.context.repo.repo,
-            pull_number: pullRequest.number,
-        });
-        const prResponse = await octokit.paginate(options);
-        files = getFiles(prResponse);
-    }
-    core_1.debug('Files changed...');
-    files.forEach(core_1.debug);
-    const supportedExtensions = core_1.getInput('extensions').split(',').map((ext) => ext.trim());
-    const supportedFiles = files.filter((filename) => {
-        const isSupportedFile = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
-        return isSupportedFile;
-    });
-    return supportedFiles;
-};
-exports.default = getChangedFiles;
-
-
-/***/ }),
-
-/***/ 6144:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const path_1 = __importDefault(__nccwpck_require__(5622));
-const core_1 = __nccwpck_require__(2186);
-const exec_1 = __nccwpck_require__(1514);
-const getChangedFiles_1 = __importDefault(__nccwpck_require__(6907));
-const run = async () => {
-    try {
-        const token = process.env.GITHUB_TOKEN;
-        if (!token) {
-            return core_1.setFailed('GITHUB_TOKEN not found in environment variables.');
-        }
-        const enableAnnotations = core_1.getBooleanInput('annotations');
-        if (!enableAnnotations) {
-            core_1.debug('Disabling Annotations');
-            core_1.info('##[remove-matcher owner=eslint-compact]');
-            core_1.info('##[remove-matcher owner=eslint-stylish]');
-        }
-        const files = await getChangedFiles_1.default(token);
-        core_1.debug('Files for linting...');
-        files.forEach(core_1.debug);
-        if (files.length === 0) {
-            return core_1.info('No files found. Skipping');
-        }
-        const eslintArgs = core_1.getInput('eslintArgs').split(' ');
-        await exec_1.exec('node', [
-            path_1.default.join(process.cwd(), 'node_modules/eslint/bin/eslint'),
-            ...files,
-            ...eslintArgs,
-        ].filter(Boolean));
-        return process.exit(0);
-    }
-    catch (err) {
-        return core_1.setFailed(err.message);
-    }
-};
-run();
-
-
-/***/ }),
-
 /***/ 2877:
 /***/ ((module) => {
 
@@ -7383,7 +7382,7 @@ module.exports = eval("require")("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");;
+module.exports = require("assert");
 
 /***/ }),
 
@@ -7391,7 +7390,7 @@ module.exports = require("assert");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");;
+module.exports = require("child_process");
 
 /***/ }),
 
@@ -7399,7 +7398,7 @@ module.exports = require("child_process");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");;
+module.exports = require("events");
 
 /***/ }),
 
@@ -7407,7 +7406,7 @@ module.exports = require("events");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");;
+module.exports = require("fs");
 
 /***/ }),
 
@@ -7415,7 +7414,7 @@ module.exports = require("fs");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http");;
+module.exports = require("http");
 
 /***/ }),
 
@@ -7423,7 +7422,7 @@ module.exports = require("http");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("https");;
+module.exports = require("https");
 
 /***/ }),
 
@@ -7431,7 +7430,7 @@ module.exports = require("https");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("net");;
+module.exports = require("net");
 
 /***/ }),
 
@@ -7439,7 +7438,7 @@ module.exports = require("net");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");;
+module.exports = require("os");
 
 /***/ }),
 
@@ -7447,7 +7446,7 @@ module.exports = require("os");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");;
+module.exports = require("path");
 
 /***/ }),
 
@@ -7455,7 +7454,7 @@ module.exports = require("path");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");;
+module.exports = require("stream");
 
 /***/ }),
 
@@ -7463,7 +7462,7 @@ module.exports = require("stream");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("string_decoder");;
+module.exports = require("string_decoder");
 
 /***/ }),
 
@@ -7471,7 +7470,7 @@ module.exports = require("string_decoder");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("timers");;
+module.exports = require("timers");
 
 /***/ }),
 
@@ -7479,7 +7478,7 @@ module.exports = require("timers");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tls");;
+module.exports = require("tls");
 
 /***/ }),
 
@@ -7487,7 +7486,7 @@ module.exports = require("tls");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("url");;
+module.exports = require("url");
 
 /***/ }),
 
@@ -7495,7 +7494,7 @@ module.exports = require("url");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");;
+module.exports = require("util");
 
 /***/ }),
 
@@ -7503,7 +7502,7 @@ module.exports = require("util");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("zlib");;
+module.exports = require("zlib");
 
 /***/ })
 
@@ -7515,8 +7514,9 @@ module.exports = require("zlib");;
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -7541,10 +7541,16 @@ module.exports = require("zlib");;
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	__nccwpck_require__.ab = __dirname + "/";/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
+/******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __nccwpck_require__(6144);
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(3109);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
+//# sourceMappingURL=index.js.map

@@ -14,11 +14,11 @@
     "lint-files-changed",
     "ci"
   ],
-  "main": "dist/index.js",
+  "main": "lib/main.js",
   "scripts": {
-    "dev": "ncc build src/index.ts -w",
-    "build": "ncc build src/index.ts --license licenses.txt",
     "lint": "eslint . --ext js,ts",
+    "build": "tsc",
+    "package": "ncc build --source-map --license licenses.txt",
     "prepare": "is-ci || husky install"
   },
   "dependencies": {
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/node": "^16.6.0",
-    "@vercel/ncc": "0.27.0",
+    "@vercel/ncc": "^0.29.0",
     "eslint": "^7.32.0",
     "eslint-config-pegasus": "^2.1.0",
     "husky": "^7.0.1",
