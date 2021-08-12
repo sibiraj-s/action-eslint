@@ -1,7 +1,8 @@
 import path from 'path';
 
 import {
-  setFailed, getInput, info, debug,
+  setFailed, getInput, getBooleanInput,
+  info, debug,
 } from '@actions/core';
 import { exec } from '@actions/exec';
 import getChangedFiles from './getChangedFiles';
@@ -14,7 +15,7 @@ const run = async () => {
       return setFailed('GITHUB_TOKEN not found in environment variables.');
     }
 
-    const enableAnnotations = getInput('annotations') === 'true';
+    const enableAnnotations = getBooleanInput('annotations');
     if (!enableAnnotations) {
       debug('Disabling Annotations');
       info('##[remove-matcher owner=eslint-compact]');
