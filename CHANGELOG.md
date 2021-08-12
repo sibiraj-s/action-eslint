@@ -14,6 +14,17 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v2.0.0 (2021-08-12)
+
+#### Enhancements
+
+- `github-token` is optional ([10b7645](https://github.com/sibiraj-s/action-eslint/commit/10b7645))
+
+#### Breaking Changes
+
+- Rename input eslintArgs to eslint-args ([a926a0e](https://github.com/sibiraj-s/action-eslint/commit/a926a0e))
+- `env.GITHUB_TOKEN` is now `with.github-token` ([10b7645](https://github.com/sibiraj-s/action-eslint/commit/10b7645))
+
 ## v1.1.3 (2021-08-12)
 
 #### Dependency Updates
