@@ -27,7 +27,7 @@ const run = async () => {
       return info('No files found. Skipping');
     }
 
-    const eslintArgs = getInput('eslintArgs').split(' ');
+    const eslintArgs = getInput('eslint-args').split(' ');
 
     await exec('node', [
       path.join(process.cwd(), 'node_modules/eslint/bin/eslint'),
