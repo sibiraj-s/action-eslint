@@ -65,10 +65,7 @@ const exec_1 = __nccwpck_require__(1514);
 const getChangedFiles_1 = __importDefault(__nccwpck_require__(3577));
 const run = async () => {
     try {
-        const token = process.env.GITHUB_TOKEN;
-        if (!token) {
-            return core_1.setFailed('GITHUB_TOKEN not found in environment variables.');
-        }
+        const token = core_1.getInput('github-token', { required: true });
         const enableAnnotations = core_1.getBooleanInput('annotations');
         if (!enableAnnotations) {
             core_1.debug('Disabling Annotations');

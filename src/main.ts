@@ -9,11 +9,7 @@ import getChangedFiles from './getChangedFiles';
 
 const run = async () => {
   try {
-    const token = process.env.GITHUB_TOKEN;
-
-    if (!token) {
-      return setFailed('GITHUB_TOKEN not found in environment variables.');
-    }
+    const token = getInput('github-token', { required: true });
 
     const enableAnnotations = getBooleanInput('annotations');
     if (!enableAnnotations) {
