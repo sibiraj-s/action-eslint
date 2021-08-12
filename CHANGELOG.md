@@ -14,6 +14,17 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v1.1.3 (2021-08-12)
+
+#### Dependency Updates
+
+- Update @vercel/ncc to v0.29.0 ([da80066](https://github.com/sibiraj-s/action-eslint/commit/da80066))
+- Update @octokit/types to v6.25.0 ([5cecebc](https://github.com/sibiraj-s/action-eslint/commit/5cecebc))
+- Update @actions/github to v5.0.0 ([d731913](https://github.com/sibiraj-s/action-eslint/commit/d731913))
+- Update @actions/exec to v1.1.0 ([828f2f0](https://github.com/sibiraj-s/action-eslint/commit/828f2f0))
+- Update @actions/core to v1.4.0 ([a1dfa29](https://github.com/sibiraj-s/action-eslint/commit/a1dfa29))
+- Update devDependencies ([f31df13](https://github.com/sibiraj-s/action-eslint/commit/f31df13))
+
 ## v1.1.2 (2021-04-20)
 
 #### Bug Fixes
