@@ -24,7 +24,7 @@ const run = async () => {
     files.forEach(debug);
 
     if (files.length === 0) {
-      return info('No files found. Skipping');
+      return info('No files found. Skipping.');
     }
 
     const eslintArgs = getInput('eslint-args').split(' ');

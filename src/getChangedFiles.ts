@@ -2,22 +2,23 @@ import { getInput, debug } from '@actions/core';
 import { getOctokit, context } from '@actions/github';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 
-type FileList = string[];
+type FileNamesList = string[];
 
 type File = {
   filename: string;
   status: string;
 };
 
-const getFiles = (files: File[]): FileList => files
+const getFileNames = (files: File[]): FileNamesList => files
   .filter((file) => file.status !== 'removed')
   .map((file) => file.filename);
 
-const getChangedFiles = async (token: string): Promise<FileList> => {
+const getChangedFiles = async (token: string): Promise<FileNamesList> => {
   const octokit = getOctokit(token);
   const pullRequest = context.payload.pull_request;
 
-  let files: FileList;
+  let filenames: FileNamesList = [];
+
   if (!pullRequest?.number) {
     const getCommitEndpointOptions = octokit.rest.repos.getCommit.endpoint.merge({
       owner: context.repo.owner,
@@ -30,7 +31,8 @@ const getChangedFiles = async (token: string): Promise<FileList> => {
     const filesArr = response.map((data) => data.files);
 
     const filesChangedInCommit = filesArr.reduce((acc, val) => acc?.concat(val || []), []);
-    files = getFiles(filesChangedInCommit as File[]);
+
+    filenames = getFileNames(filesChangedInCommit as File[]);
   } else {
     const listFilesEndpointOptions = octokit.rest.pulls.listFiles.endpoint.merge({
       owner: context.repo.owner,
@@ -39,18 +41,19 @@ const getChangedFiles = async (token: string): Promise<FileList> => {
     });
 
     type PullsListFilesResponse = GetResponseDataTypeFromEndpointMethod<typeof octokit.rest.pulls.listFiles>;
-    const prResponse: PullsListFilesResponse = await octokit.paginate(listFilesEndpointOptions);
-    files = getFiles(prResponse as File[]);
+    const filesChangedInPR: PullsListFilesResponse = await octokit.paginate(listFilesEndpointOptions);
+
+    filenames = getFileNames(filesChangedInPR as File[]);
   }
 
   debug('Files changed...');
-  files.forEach(debug);
+  filenames.forEach(debug);
 
   const supportedExtensions = getInput('extensions').split(',').map((ext) => ext.trim());
 
-  const supportedFiles = files.filter((filename) => {
-    const isSupportedFile = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
-    return isSupportedFile;
+  const supportedFiles = filenames.filter((filename) => {
+    const isFileSupported = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
+    return isFileSupported;
   });
 
   return supportedFiles;

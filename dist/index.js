@@ -9,13 +9,13 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(2186);
 const github_1 = __nccwpck_require__(5438);
-const getFiles = (files) => files
+const getFileNames = (files) => files
     .filter((file) => file.status !== 'removed')
     .map((file) => file.filename);
 const getChangedFiles = async (token) => {
     const octokit = github_1.getOctokit(token);
     const pullRequest = github_1.context.payload.pull_request;
-    let files;
+    let filenames = [];
     if (!(pullRequest === null || pullRequest === void 0 ? void 0 : pullRequest.number)) {
         const getCommitEndpointOptions = octokit.rest.repos.getCommit.endpoint.merge({
             owner: github_1.context.repo.owner,
@@ -25,7 +25,7 @@ const getChangedFiles = async (token) => {
         const response = await octokit.paginate(getCommitEndpointOptions);
         const filesArr = response.map((data) => data.files);
         const filesChangedInCommit = filesArr.reduce((acc, val) => acc === null || acc === void 0 ? void 0 : acc.concat(val || []), []);
-        files = getFiles(filesChangedInCommit);
+        filenames = getFileNames(filesChangedInCommit);
     }
     else {
         const listFilesEndpointOptions = octokit.rest.pulls.listFiles.endpoint.merge({
@@ -34,14 +34,14 @@ const getChangedFiles = async (token) => {
             pull_number: pullRequest.number,
         });
         const filesChangedInPR = await octokit.paginate(listFilesEndpointOptions);
-        files = getFiles(filesChangedInPR);
+        filenames = getFileNames(filesChangedInPR);
     }
     core_1.debug('Files changed...');
-    files.forEach(core_1.debug);
+    filenames.forEach(core_1.debug);
     const supportedExtensions = core_1.getInput('extensions').split(',').map((ext) => ext.trim());
-    const supportedFiles = files.filter((filename) => {
-        const isSupportedFile = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
-        return isSupportedFile;
+    const supportedFiles = filenames.filter((filename) => {
+        const isFileSupported = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
+        return isFileSupported;
     });
     return supportedFiles;
 };
@@ -76,7 +76,7 @@ const run = async () => {
         core_1.debug('Files for linting...');
         files.forEach(core_1.debug);
         if (files.length === 0) {
-            return core_1.info('No files found. Skipping');
+            return core_1.info('No files found. Skipping.');
         }
         const eslintArgs = core_1.getInput('eslint-args').split(' ');
         await exec_1.exec('node', [

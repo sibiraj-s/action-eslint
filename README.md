@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: 16
       - run: npm ci # or yarn install
       - uses: sibiraj-s/action-eslint@v2
         with:
@@ -44,7 +44,7 @@ Read more on [using third-party actions](https://docs.github.com/en/actions/lear
 
 ## Known Issues
 
-- Yarn 2 is not supported
+- Yarn 2+ is not supported
 
 ## Debugging
 
