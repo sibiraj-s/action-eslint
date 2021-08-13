@@ -15,6 +15,7 @@
   "keywords": [
     "eslint",
     "github-action",
+    "action-eslint",
     "lint-files-changed",
     "ci"
   ],
