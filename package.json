@@ -10,7 +10,8 @@
   "homepage": "https://github.com/sibiraj-s/action-eslint#readme",
   "main": "lib/main.js",
   "engines": {
-    "node": ">=16"
+    "node": ">=16",
+    "npm": ">=7"
   },
   "keywords": [
     "eslint",
