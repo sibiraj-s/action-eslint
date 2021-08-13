@@ -33,8 +33,8 @@ const getChangedFiles = async (token) => {
             repo: github_1.context.repo.repo,
             pull_number: pullRequest.number,
         });
-        const prResponse = await octokit.paginate(listFilesEndpointOptions);
-        files = getFiles(prResponse);
+        const filesChangedInPR = await octokit.paginate(listFilesEndpointOptions);
+        files = getFiles(filesChangedInPR);
     }
     core_1.debug('Files changed...');
     files.forEach(core_1.debug);
