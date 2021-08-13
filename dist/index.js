@@ -17,23 +17,23 @@ const getChangedFiles = async (token) => {
     const pullRequest = github_1.context.payload.pull_request;
     let files;
     if (!(pullRequest === null || pullRequest === void 0 ? void 0 : pullRequest.number)) {
-        const options = octokit.rest.repos.getCommit.endpoint.merge({
+        const getCommitEndpointOptions = octokit.rest.repos.getCommit.endpoint.merge({
             owner: github_1.context.repo.owner,
             repo: github_1.context.repo.repo,
             ref: github_1.context.sha,
         });
-        const response = await octokit.paginate(options);
+        const response = await octokit.paginate(getCommitEndpointOptions);
         const filesArr = response.map((data) => data.files);
         const filesChangedInCommit = filesArr.reduce((acc, val) => acc === null || acc === void 0 ? void 0 : acc.concat(val || []), []);
         files = getFiles(filesChangedInCommit);
     }
     else {
-        const options = octokit.rest.pulls.listFiles.endpoint.merge({
+        const listFilesEndpointOptions = octokit.rest.pulls.listFiles.endpoint.merge({
             owner: github_1.context.repo.owner,
             repo: github_1.context.repo.repo,
             pull_number: pullRequest.number,
         });
-        const prResponse = await octokit.paginate(options);
+        const prResponse = await octokit.paginate(listFilesEndpointOptions);
         files = getFiles(prResponse);
     }
     core_1.debug('Files changed...');
