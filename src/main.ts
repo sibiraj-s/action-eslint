@@ -2,7 +2,7 @@ import path from 'path';
 
 import {
   setFailed, getInput, getBooleanInput,
-  info, debug,
+  info, debug, notice,
 } from '@actions/core';
 import { exec } from '@actions/exec';
 import getChangedFiles from './getChangedFiles';
@@ -24,7 +24,7 @@ const run = async () => {
     files.forEach(debug);
 
     if (files.length === 0) {
-      return info('No files found. Skipping.');
+      return notice('No files found. Skipping.');
     }
 
     const eslintArgs = getInput('eslint-args').split(' ');
@@ -37,7 +37,11 @@ const run = async () => {
 
     return process.exit(0);
   } catch (err) {
-    return setFailed(err.message);
+    if (err instanceof Error) {
+      return setFailed(err.message);
+    }
+
+    return setFailed(err as Error);
   }
 };
 
