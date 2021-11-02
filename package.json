@@ -33,7 +33,7 @@
     "@octokit/types": "^6.34.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^13.2.1",
+    "@commitlint/cli": "^14.1.0",
     "@types/node": "^16.11.6",
     "@vercel/ncc": "^0.31.1",
     "commitlint-config-non-conventional": "^1.0.0",
