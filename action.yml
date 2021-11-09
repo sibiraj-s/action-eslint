@@ -27,7 +27,7 @@ inputs:
     description: 'Enable or disable annotations'
     required: false
     default: true
-  path-link:
-    description: 'Creates a link from path of process.cwd() to node_modules if necessary'
+  bin-path:
+    description: 'Path to eslint installation directory. Defaults to `node_modules/eslint/bin`'
     required: false
-    default: ''
+    default: 'node_modules/eslint/bin'

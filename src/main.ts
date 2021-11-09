@@ -28,13 +28,15 @@ const run = async () => {
     }
 
     const eslintArgs = getInput('eslint-args').split(' ');
-    const pathLink = getInput('path-link');
+    const binPath = getInput('bin-path');
 
-    await exec('node', [
-      path.join(process.cwd(), pathLink, 'node_modules/eslint/bin/eslint'),
+    const execOptions = [
+      path.resolve(binPath, 'eslint'),
       ...files,
       ...eslintArgs,
-    ].filter(Boolean));
+    ].filter(Boolean);
+
+    await exec('node', execOptions);
 
     return process.exit(0);
   } catch (err) {
