@@ -11,13 +11,13 @@
   "main": "lib/main.js",
   "engines": {
     "node": ">=16.0.0",
-    "npm": ">=7.0.0"
+    "npm": ">=8.0.0"
   },
   "keywords": [
     "eslint",
     "github-action",
     "action-eslint",
-    "lint-files-changed",
+    "lint-changed-files",
     "ci"
   ],
   "scripts": {
