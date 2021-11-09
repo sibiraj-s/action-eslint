@@ -79,8 +79,9 @@ const run = async () => {
             return (0, core_1.notice)('No files found. Skipping.');
         }
         const eslintArgs = (0, core_1.getInput)('eslint-args').split(' ');
+        const pathLink = (0, core_1.getInput)('path-link');
         await (0, exec_1.exec)('node', [
-            path_1.default.join(process.cwd(), 'node_modules/eslint/bin/eslint'),
+            path_1.default.join(process.cwd(), pathLink, 'node_modules/eslint/bin/eslint'),
             ...files,
             ...eslintArgs,
         ].filter(Boolean));
