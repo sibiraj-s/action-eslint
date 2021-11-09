@@ -89,10 +89,7 @@ const run = async () => {
         return process.exit(0);
     }
     catch (err) {
-        if (err instanceof Error) {
-            return (0, core_1.setFailed)(err.message);
-        }
-        return (0, core_1.setFailed)(err);
+        return (0, core_1.setFailed)(err.message);
     }
 };
 run();

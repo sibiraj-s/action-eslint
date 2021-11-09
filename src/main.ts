@@ -40,11 +40,7 @@ const run = async () => {
 
     return process.exit(0);
   } catch (err) {
-    if (err instanceof Error) {
-      return setFailed(err.message);
-    }
-
-    return setFailed(err as Error);
+    return setFailed(err.message);
   }
 };
 
