@@ -14,6 +14,16 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v2.1.0 (2021-08-12)
+
+#### Enhancements
+
+- Run action with nodejs 16 ([a6b82ed](https://github.com/sibiraj-s/action-eslint/commit/a6b82ed))
+
+#### Dependency Updates
+
+- Update @vercel/ncc to v0.33.0 ([6b76f89](https://github.com/sibiraj-s/action-eslint/commit/6b76f89))
+
 ## v2.0.0 (2021-08-12)
 
 #### Enhancements
