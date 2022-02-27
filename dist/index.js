@@ -1,7 +1,63 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 3577:
+/***/ 5598:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.disableAnnotations = void 0;
+const core_1 = __nccwpck_require__(2186);
+const disableAnnotations = () => {
+    (0, core_1.debug)('Disabling Annotations');
+    (0, core_1.info)('##[remove-matcher owner=eslint-compact]');
+    (0, core_1.info)('##[remove-matcher owner=eslint-stylish]');
+};
+exports.disableAnnotations = disableAnnotations;
+
+
+/***/ }),
+
+/***/ 5764:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.runEslint = void 0;
+const node_path_1 = __importDefault(__nccwpck_require__(9411));
+const core_1 = __nccwpck_require__(2186);
+const exec_1 = __nccwpck_require__(1514);
+const annotations_1 = __nccwpck_require__(5598);
+const get_changed_files_1 = __importDefault(__nccwpck_require__(7990));
+const runEslint = async (inputs) => {
+    if (!inputs.annotations) {
+        (0, annotations_1.disableAnnotations)();
+    }
+    const files = await (0, get_changed_files_1.default)(inputs.token);
+    if (files.length === 0) {
+        (0, core_1.notice)('No files found. Skipping.');
+        return;
+    }
+    (0, core_1.debug)('Files for linting...');
+    files.forEach(core_1.debug);
+    const execOptions = [
+        node_path_1.default.resolve(inputs.binPath, 'eslint'),
+        ...files,
+        ...inputs.eslintArgs,
+    ].filter(Boolean);
+    await (0, exec_1.exec)('node', execOptions);
+};
+exports.runEslint = runEslint;
+
+
+/***/ }),
+
+/***/ 7990:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -46,53 +102,6 @@ const getChangedFiles = async (token) => {
     return supportedFiles;
 };
 exports["default"] = getChangedFiles;
-
-
-/***/ }),
-
-/***/ 3109:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const path_1 = __importDefault(__nccwpck_require__(1017));
-const core_1 = __nccwpck_require__(2186);
-const exec_1 = __nccwpck_require__(1514);
-const getChangedFiles_1 = __importDefault(__nccwpck_require__(3577));
-const run = async () => {
-    try {
-        const token = (0, core_1.getInput)('github-token', { required: true });
-        const enableAnnotations = (0, core_1.getBooleanInput)('annotations');
-        if (!enableAnnotations) {
-            (0, core_1.debug)('Disabling Annotations');
-            (0, core_1.info)('##[remove-matcher owner=eslint-compact]');
-            (0, core_1.info)('##[remove-matcher owner=eslint-stylish]');
-        }
-        const files = await (0, getChangedFiles_1.default)(token);
-        (0, core_1.debug)('Files for linting...');
-        files.forEach(core_1.debug);
-        if (files.length === 0) {
-            return (0, core_1.notice)('No files found. Skipping.');
-        }
-        const eslintArgs = (0, core_1.getInput)('eslint-args').split(' ');
-        const binPath = (0, core_1.getInput)('bin-path');
-        const execOptions = [
-            path_1.default.resolve(binPath, 'eslint'),
-            ...files,
-            ...eslintArgs,
-        ].filter(Boolean);
-        await (0, exec_1.exec)('node', execOptions);
-        return process.exit(0);
-    }
-    catch (err) {
-        return (0, core_1.setFailed)(err.message);
-    }
-};
-run();
 
 
 /***/ }),
@@ -9726,6 +9735,14 @@ module.exports = require("net");
 
 /***/ }),
 
+/***/ 9411:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:path");
+
+/***/ }),
+
 /***/ 2037:
 /***/ ((module) => {
 
@@ -9852,13 +9869,35 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(3109);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+var exports = __webpack_exports__;
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __nccwpck_require__(2186);
+const eslint_1 = __nccwpck_require__(5764);
+const run = async () => {
+    try {
+        const inputs = {
+            token: (0, core_1.getInput)('github-token', { required: true }),
+            annotations: (0, core_1.getBooleanInput)('annotations'),
+            eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
+            binPath: (0, core_1.getInput)('bin-path'),
+        };
+        await (0, eslint_1.runEslint)(inputs);
+        process.exit(0);
+    }
+    catch (err) {
+        (0, core_1.setFailed)(err.message);
+    }
+};
+run();
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
