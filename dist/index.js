@@ -43,8 +43,9 @@ const runEslint = async (inputs) => {
         (0, core_1.notice)('No files found. Skipping.');
         return;
     }
-    (0, core_1.debug)('Files for linting...');
-    files.forEach(core_1.debug);
+    (0, core_1.startGroup)('Files for linting...');
+    files.forEach(core_1.info);
+    (0, core_1.endGroup)();
     const execOptions = [
         node_path_1.default.resolve(inputs.binPath, 'eslint'),
         ...files,
@@ -92,8 +93,9 @@ const getChangedFiles = async (token) => {
         const filesChangedInPR = await octokit.paginate(listFilesEndpointOptions);
         filenames = getFileNames(filesChangedInPR);
     }
-    (0, core_1.debug)('Files changed...');
-    filenames.forEach(core_1.debug);
+    (0, core_1.startGroup)('Files changed...');
+    filenames.forEach(core_1.info);
+    (0, core_1.endGroup)();
     const supportedExtensions = (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim());
     const supportedFiles = filenames.filter((filename) => {
         const isFileSupported = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));

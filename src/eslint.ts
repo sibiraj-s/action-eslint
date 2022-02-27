@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { debug, notice } from '@actions/core';
+import { notice, startGroup, endGroup, info } from '@actions/core';
 import { exec } from '@actions/exec';
 
 import { disableAnnotations } from './annotations';
@@ -24,8 +24,9 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
     return;
   }
 
-  debug('Files for linting...');
-  files.forEach(debug);
+  startGroup('Files for linting...');
+  files.forEach(info);
+  endGroup();
 
   const execOptions = [
     path.resolve(inputs.binPath, 'eslint'),
