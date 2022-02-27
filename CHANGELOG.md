@@ -14,6 +14,17 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v2.1.1 (2022-02-27)
+
+#### Enhancements
+
+- Print changed files ([e522c35](https://github.com/sibiraj-s/action-eslint/commit/e522c35))
+
+#### Dependency Updates
+
+- Update @vercel/ncc to v0.33.3 ([9a21f96](https://github.com/sibiraj-s/action-eslint/commit/9a21f96))
+- Move @octokit/types to devDependencies ([c6b868b](https://github.com/sibiraj-s/action-eslint/commit/c6b868b))
+
 ## v2.1.0 (2021-08-12)
 
 #### Enhancements
