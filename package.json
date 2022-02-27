@@ -29,11 +29,11 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/exec": "^1.1.0",
-    "@actions/github": "^5.0.0",
-    "@octokit/types": "^6.34.0"
+    "@actions/github": "^5.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
+    "@octokit/types": "^6.34.0",
     "@types/node": "^16.11.26",
     "@vercel/ncc": "^0.33.3",
     "commitlint-config-non-conventional": "^1.0.1",
