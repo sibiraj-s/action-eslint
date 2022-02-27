@@ -1,4 +1,3 @@
-import { getInput, startGroup, endGroup, info } from '@actions/core';
 import { getOctokit, context } from '@actions/github';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 
@@ -46,18 +45,7 @@ const getChangedFiles = async (token: string): Promise<FileNamesList> => {
     filenames = getFileNames(filesChangedInPR as File[]);
   }
 
-  startGroup('Files changed.');
-  filenames.forEach((filename) => info(`- ${filename}`));
-  endGroup();
-
-  const supportedExtensions = getInput('extensions').split(',').map((ext) => ext.trim());
-
-  const supportedFiles = filenames.filter((filename) => {
-    const isFileSupported = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
-    return isFileSupported;
-  });
-
-  return supportedFiles;
+  return filenames;
 };
 
 export default getChangedFiles;

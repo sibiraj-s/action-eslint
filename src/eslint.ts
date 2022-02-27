@@ -10,6 +10,7 @@ export interface Inputs {
   annotations: boolean;
   eslintArgs: string[];
   binPath: string;
+  extensions: string[];
 }
 
 export const runEslint = async (inputs: Inputs): Promise<void> => {
@@ -17,7 +18,16 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
     disableAnnotations();
   }
 
-  const files = await getChangedFiles(inputs.token);
+  const changedFiles = await getChangedFiles(inputs.token);
+
+  startGroup('Files changed.');
+  changedFiles.forEach((file) => info(`- ${file}`));
+  endGroup();
+
+  const files = changedFiles.filter((filename) => {
+    const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
+    return isFileSupported;
+  });
 
   if (files.length === 0) {
     notice('No files found. Skipping.');

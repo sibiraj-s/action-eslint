@@ -38,7 +38,14 @@ const runEslint = async (inputs) => {
     if (!inputs.annotations) {
         (0, annotations_1.disableAnnotations)();
     }
-    const files = await (0, get_changed_files_1.default)(inputs.token);
+    const changedFiles = await (0, get_changed_files_1.default)(inputs.token);
+    (0, core_1.startGroup)('Files changed.');
+    changedFiles.forEach((file) => (0, core_1.info)(`- ${file}`));
+    (0, core_1.endGroup)();
+    const files = changedFiles.filter((filename) => {
+        const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
+        return isFileSupported;
+    });
     if (files.length === 0) {
         (0, core_1.notice)('No files found. Skipping.');
         return;
@@ -64,7 +71,6 @@ exports.runEslint = runEslint;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __nccwpck_require__(2186);
 const github_1 = __nccwpck_require__(5438);
 const getFileNames = (files) => files
     .filter((file) => file.status !== 'removed')
@@ -93,15 +99,7 @@ const getChangedFiles = async (token) => {
         const filesChangedInPR = await octokit.paginate(listFilesEndpointOptions);
         filenames = getFileNames(filesChangedInPR);
     }
-    (0, core_1.startGroup)('Files changed.');
-    filenames.forEach((filename) => (0, core_1.info)(`- ${filename}`));
-    (0, core_1.endGroup)();
-    const supportedExtensions = (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim());
-    const supportedFiles = filenames.filter((filename) => {
-        const isFileSupported = supportedExtensions.find((ext) => filename.endsWith(`.${ext}`));
-        return isFileSupported;
-    });
-    return supportedFiles;
+    return filenames;
 };
 exports["default"] = getChangedFiles;
 
@@ -9887,6 +9885,7 @@ const run = async () => {
             annotations: (0, core_1.getBooleanInput)('annotations'),
             eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
             binPath: (0, core_1.getInput)('bin-path'),
+            extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
         };
         await (0, eslint_1.runEslint)(inputs);
         process.exit(0);
