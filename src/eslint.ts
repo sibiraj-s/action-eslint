@@ -24,8 +24,8 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
     return;
   }
 
-  startGroup('Files for linting...');
-  files.forEach(info);
+  startGroup('Files for linting.');
+  files.forEach((file) => info(`- ${file}`));
   endGroup();
 
   const execOptions = [

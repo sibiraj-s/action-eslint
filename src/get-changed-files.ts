@@ -46,8 +46,8 @@ const getChangedFiles = async (token: string): Promise<FileNamesList> => {
     filenames = getFileNames(filesChangedInPR as File[]);
   }
 
-  startGroup('Files changed...');
-  filenames.forEach(info);
+  startGroup('Files changed.');
+  filenames.forEach((filename) => info(`- ${filename}`));
   endGroup();
 
   const supportedExtensions = getInput('extensions').split(',').map((ext) => ext.trim());
