@@ -21,7 +21,7 @@
     "ci"
   ],
   "scripts": {
-    "lint": "eslint . --ext js,ts",
+    "lint": "eslint . --ext js,ts --ignore-path .gitignore",
     "build": "tsc",
     "package": "ncc build --source-map --license licenses.txt",
     "prepare": "is-ci || husky install"
