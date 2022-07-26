@@ -46,14 +46,14 @@ const runEslint = async (inputs) => {
     (0, core_1.endGroup)();
     const ig = (0, ignore_1.default)();
     if (node_fs_1.default.existsSync('.eslintignore')) {
-        ig.add(node_fs_1.default.readFileSync('.eslintignore', 'utf8'));
+        ig.add(node_fs_1.default.readFileSync('.eslintignore', 'utf8').toString());
     }
     const files = changedFiles
         .filter((filename) => {
         const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
         return isFileSupported;
     })
-        .filter(ig.ignores);
+        .filter((filename) => ig.ignores(filename));
     if (files.length === 0) {
         (0, core_1.notice)('No files found. Skipping.');
         return;

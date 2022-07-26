@@ -28,7 +28,7 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
 
   const ig = ignore();
   if (fs.existsSync('.eslintignore')) {
-    ig.add(fs.readFileSync('.eslintignore', 'utf8'));
+    ig.add(fs.readFileSync('.eslintignore', 'utf8').toString());
   }
 
   const files = changedFiles
@@ -36,7 +36,7 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
       const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
       return isFileSupported;
     })
-    .filter(ig.ignores);
+    .filter((filename) => ig.ignores(filename));
 
   if (files.length === 0) {
     notice('No files found. Skipping.');
