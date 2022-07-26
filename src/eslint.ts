@@ -1,4 +1,6 @@
+import fs from 'node:fs';
 import path from 'node:path';
+import ignore from 'ignore';
 import { notice, startGroup, endGroup, info } from '@actions/core';
 import { exec } from '@actions/exec';
 
@@ -24,10 +26,17 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
   changedFiles.forEach((file) => info(`- ${file}`));
   endGroup();
 
-  const files = changedFiles.filter((filename) => {
-    const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
-    return isFileSupported;
-  });
+  const ig = ignore();
+  if (fs.existsSync('.eslintignore')) {
+    ig.add(fs.readFileSync('.eslintignore', 'utf8'));
+  }
+
+  const files = changedFiles
+    .filter((filename) => {
+      const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
+      return isFileSupported;
+    })
+    .filter(ig.ignores);
 
   if (files.length === 0) {
     notice('No files found. Skipping.');
