@@ -28,6 +28,7 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
 
   const ig = ignore();
   if (fs.existsSync('.eslintignore')) {
+    notice('Found .eslintignore, filtering files changed.');
     ig.add(fs.readFileSync('.eslintignore', 'utf8').toString());
   }
 

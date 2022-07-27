@@ -46,6 +46,7 @@ const runEslint = async (inputs) => {
     (0, core_1.endGroup)();
     const ig = (0, ignore_1.default)();
     if (node_fs_1.default.existsSync('.eslintignore')) {
+        (0, core_1.notice)('Found .eslintignore, filtering files changed.');
         ig.add(node_fs_1.default.readFileSync('.eslintignore', 'utf8').toString());
     }
     const files = changedFiles
