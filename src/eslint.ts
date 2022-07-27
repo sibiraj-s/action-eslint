@@ -36,7 +36,7 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
       const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
       return isFileSupported;
     })
-    .filter((filename) => ig.ignores(filename));
+    .filter((filename) => !ig.ignores(filename));
 
   if (files.length === 0) {
     notice('No files found. Skipping.');
