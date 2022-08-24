@@ -1,6 +1,6 @@
 {
   "name": "action-eslint",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "GitHub Action that runs ESLint for files changed in a Pull Request",
   "author": "sibiraj-s",
   "license": "MIT",

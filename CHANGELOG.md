@@ -14,6 +14,13 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v2.1.2 (2022-08-24)
+
+- Update @actions/github to v5.0.3 ([e71e789](https://github.com/sibiraj-s/action-eslint/commit/e71e789))
+- Update @actions/core to v1.9.1 ([c41dfcc](https://github.com/sibiraj-s/action-eslint/commit/c41dfcc))
+
+#### Dependency Updates
+
 ## v2.1.1 (2022-02-27)
 
 #### Enhancements
