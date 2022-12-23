@@ -5728,63 +5728,67 @@ exports.request = request;
 /***/ 3682:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-var register = __nccwpck_require__(4670)
-var addHook = __nccwpck_require__(5549)
-var removeHook = __nccwpck_require__(6819)
+var register = __nccwpck_require__(4670);
+var addHook = __nccwpck_require__(5549);
+var removeHook = __nccwpck_require__(6819);
 
 // bind with array of arguments: https://stackoverflow.com/a/21792913
-var bind = Function.bind
-var bindable = bind.bind(bind)
+var bind = Function.bind;
+var bindable = bind.bind(bind);
 
-function bindApi (hook, state, name) {
-  var removeHookRef = bindable(removeHook, null).apply(null, name ? [state, name] : [state])
-  hook.api = { remove: removeHookRef }
-  hook.remove = removeHookRef
-
-  ;['before', 'error', 'after', 'wrap'].forEach(function (kind) {
-    var args = name ? [state, kind, name] : [state, kind]
-    hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args)
-  })
+function bindApi(hook, state, name) {
+  var removeHookRef = bindable(removeHook, null).apply(
+    null,
+    name ? [state, name] : [state]
+  );
+  hook.api = { remove: removeHookRef };
+  hook.remove = removeHookRef;
+  ["before", "error", "after", "wrap"].forEach(function (kind) {
+    var args = name ? [state, kind, name] : [state, kind];
+    hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args);
+  });
 }
 
-function HookSingular () {
-  var singularHookName = 'h'
+function HookSingular() {
+  var singularHookName = "h";
   var singularHookState = {
-    registry: {}
-  }
-  var singularHook = register.bind(null, singularHookState, singularHookName)
-  bindApi(singularHook, singularHookState, singularHookName)
-  return singularHook
+    registry: {},
+  };
+  var singularHook = register.bind(null, singularHookState, singularHookName);
+  bindApi(singularHook, singularHookState, singularHookName);
+  return singularHook;
 }
 
-function HookCollection () {
+function HookCollection() {
   var state = {
-    registry: {}
-  }
+    registry: {},
+  };
 
-  var hook = register.bind(null, state)
-  bindApi(hook, state)
+  var hook = register.bind(null, state);
+  bindApi(hook, state);
 
-  return hook
+  return hook;
 }
 
-var collectionHookDeprecationMessageDisplayed = false
-function Hook () {
+var collectionHookDeprecationMessageDisplayed = false;
+function Hook() {
   if (!collectionHookDeprecationMessageDisplayed) {
-    console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4')
-    collectionHookDeprecationMessageDisplayed = true
+    console.warn(
+      '[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4'
+    );
+    collectionHookDeprecationMessageDisplayed = true;
   }
-  return HookCollection()
+  return HookCollection();
 }
 
-Hook.Singular = HookSingular.bind()
-Hook.Collection = HookCollection.bind()
+Hook.Singular = HookSingular.bind();
+Hook.Collection = HookCollection.bind();
 
-module.exports = Hook
+module.exports = Hook;
 // expose constructors as a named property for TypeScript
-module.exports.Hook = Hook
-module.exports.Singular = Hook.Singular
-module.exports.Collection = Hook.Collection
+module.exports.Hook = Hook;
+module.exports.Singular = Hook.Singular;
+module.exports.Collection = Hook.Collection;
 
 
 /***/ }),
@@ -5944,6 +5948,7 @@ const EMPTY = ''
 const SPACE = ' '
 const ESCAPE = '\\'
 const REGEX_TEST_BLANK_LINE = /^\s+$/
+const REGEX_INVALID_TRAILING_BACKSLASH = /(?:[^\\]|^)\\$/
 const REGEX_REPLACE_LEADING_EXCAPED_EXCLAMATION = /^\\!/
 const REGEX_REPLACE_LEADING_EXCAPED_HASH = /^\\#/
 const REGEX_SPLITALL_CRLF = /\r?\n/g
@@ -5955,10 +5960,14 @@ const REGEX_SPLITALL_CRLF = /\r?\n/g
 const REGEX_TEST_INVALID_PATH = /^\.*\/|^\.+$/
 
 const SLASH = '/'
-const KEY_IGNORE = typeof Symbol !== 'undefined'
-  ? Symbol.for('node-ignore')
-  /* istanbul ignore next */
-  : 'node-ignore'
+
+// Do not use ternary expression here, since "istanbul ignore next" is buggy
+let TMP_KEY_IGNORE = 'node-ignore'
+/* istanbul ignore else */
+if (typeof Symbol !== 'undefined') {
+  TMP_KEY_IGNORE = Symbol.for('node-ignore')
+}
+const KEY_IGNORE = TMP_KEY_IGNORE
 
 const define = (object, key, value) =>
   Object.defineProperty(object, key, {value})
@@ -6125,18 +6134,27 @@ const REPLACERS = [
       : '\\/.+'
   ],
 
-  // intermediate wildcards
+  // normal intermediate wildcards
   [
     // Never replace escaped '*'
     // ignore rule '\*' will match the path '*'
 
     // 'abc.*/' -> go
-    // 'abc.*'  -> skip this rule
-    /(^|[^\\]+)\\\*(?=.+)/g,
+    // 'abc.*'  -> skip this rule,
+    //    coz trailing single wildcard will be handed by [trailing wildcard]
+    /(^|[^\\]+)(\\\*)+(?=.+)/g,
 
     // '*.js' matches '.js'
     // '*.js' doesn't match 'abc'
-    (_, p1) => `${p1}[^\\/]*`
+    (_, p1, p2) => {
+      // 1.
+      // > An asterisk "*" matches anything except a slash.
+      // 2.
+      // > Other consecutive asterisks are considered regular asterisks
+      // > and will match according to the previous rules.
+      const unescaped = p2.replace(/\\\*/g, '[^\\/]*')
+      return p1 + unescaped
+    }
   ],
 
   [
@@ -6247,6 +6265,7 @@ const isString = subject => typeof subject === 'string'
 const checkPattern = pattern => pattern
   && isString(pattern)
   && !REGEX_TEST_BLANK_LINE.test(pattern)
+  && !REGEX_INVALID_TRAILING_BACKSLASH.test(pattern)
 
   // > A line starting with # serves as a comment.
   && pattern.indexOf('#') !== 0
@@ -6512,7 +6531,7 @@ module.exports = factory
 
 // Windows
 // --------------------------------------------------------------
-/* istanbul ignore if  */
+/* istanbul ignore if */
 if (
   // Detect `process` so that it can run in browsers.
   typeof process !== 'undefined'
