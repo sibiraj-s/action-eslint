@@ -16,18 +16,18 @@ inputs:
     required: false
     default: ${{ github.token }}
   eslint-args:
-    description: 'ESLint CLI flags'
+    description: ESLint CLI flags
     required: false
     default: ''
   extensions:
-    description: 'Extensions to filter'
+    description: Extensions to filter
     required: false
-    default: 'js'
+    default: js
   annotations:
-    description: 'Enable or disable annotations'
+    description: Enable or disable annotations
     required: false
     default: true
   bin-path:
-    description: 'Path to eslint installation directory. Defaults to `node_modules/eslint/bin`'
+    description: Path to eslint installation directory. Defaults to `node_modules/eslint/bin`
     required: false
-    default: 'node_modules/eslint/bin'
+    default: node_modules/eslint/bin
