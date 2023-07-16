@@ -69,14 +69,16 @@ steps:
 
 ### Root directory
 
-This option can be particularly useful when the eslint installation is not located in the root directory.
+The `root-dir` option can be especially useful when the eslint installation is not located in the root directory.
 
-```yml
+```yaml
 steps:
   - uses: action@v2
     with:
       root-dir: apps/website
 ```
+
+Note: When using this option, options such as `ignore-file` will be resolved based on the specified directory.
 
 ## Security
 

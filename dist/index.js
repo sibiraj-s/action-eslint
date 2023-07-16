@@ -46,9 +46,10 @@ const runEslint = async (inputs) => {
     (0, core_1.endGroup)();
     const ig = (0, ignore_1.default)();
     if (inputs.ignoreFile) {
-        if (node_fs_1.default.existsSync(inputs.ignoreFile)) {
+        const ignoreFile = node_path_1.default.resolve(inputs.rootDir, inputs.ignoreFile);
+        if (node_fs_1.default.existsSync(ignoreFile)) {
             (0, core_1.info)(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
-            const ignoreFileContent = await node_fs_1.default.promises.readFile(inputs.ignoreFile, 'utf-8');
+            const ignoreFileContent = await node_fs_1.default.promises.readFile(ignoreFile, 'utf-8');
             ig.add(ignoreFileContent);
         }
         else {

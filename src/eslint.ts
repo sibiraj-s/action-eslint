@@ -30,10 +30,12 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
   endGroup();
 
   const ig = ignore();
+
   if (inputs.ignoreFile) {
-    if (fs.existsSync(inputs.ignoreFile)) {
+    const ignoreFile = path.resolve(inputs.rootDir, inputs.ignoreFile);
+    if (fs.existsSync(ignoreFile)) {
       info(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
-      const ignoreFileContent = await fs.promises.readFile(inputs.ignoreFile, 'utf-8');
+      const ignoreFileContent = await fs.promises.readFile(ignoreFile, 'utf-8');
       ig.add(ignoreFileContent);
     } else {
       notice(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
