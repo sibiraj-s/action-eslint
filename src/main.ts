@@ -10,6 +10,7 @@ const run = async ():Promise<void> => {
       eslintArgs: getInput('eslint-args').split(' '),
       rootDir: getInput('root-dir'),
       extensions: getInput('extensions').split(',').map((ext) => ext.trim()),
+      ignoreFile: getInput('ignore-file'),
     };
 
     await runEslint(inputs);

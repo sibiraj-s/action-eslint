@@ -14,6 +14,7 @@ export interface Inputs {
   eslintArgs: string[];
   rootDir: string;
   extensions: string[];
+  ignoreFile: string;
 }
 
 export const runEslint = async (inputs: Inputs): Promise<void> => {
@@ -28,9 +29,14 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
   endGroup();
 
   const ig = ignore();
-  if (fs.existsSync('.eslintignore')) {
-    notice('Found .eslintignore, filtering files changed.');
-    ig.add(fs.readFileSync('.eslintignore', 'utf8').toString());
+  if (inputs.ignoreFile) {
+    if (fs.existsSync(inputs.ignoreFile)) {
+      info(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
+      const ignoreFileContent = await fs.promises.readFile(inputs.ignoreFile, 'utf-8');
+      ig.add(ignoreFileContent);
+    } else {
+      notice(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
+    }
   }
 
   const files = changedFiles

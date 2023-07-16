@@ -45,9 +45,15 @@ const runEslint = async (inputs) => {
     changedFiles.forEach((file) => (0, core_1.info)(`- ${file}`));
     (0, core_1.endGroup)();
     const ig = (0, ignore_1.default)();
-    if (node_fs_1.default.existsSync('.eslintignore')) {
-        (0, core_1.notice)('Found .eslintignore, filtering files changed.');
-        ig.add(node_fs_1.default.readFileSync('.eslintignore', 'utf8').toString());
+    if (inputs.ignoreFile) {
+        if (node_fs_1.default.existsSync(inputs.ignoreFile)) {
+            (0, core_1.info)(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
+            const ignoreFileContent = await node_fs_1.default.promises.readFile(inputs.ignoreFile, 'utf-8');
+            ig.add(ignoreFileContent);
+        }
+        else {
+            (0, core_1.notice)(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
+        }
     }
     const files = changedFiles
         .filter((filename) => {
@@ -11816,6 +11822,7 @@ const run = async () => {
             eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
             rootDir: (0, core_1.getInput)('root-dir'),
             extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
+            ignoreFile: (0, core_1.getInput)('ignore-file'),
         };
         await (0, eslint_1.runEslint)(inputs);
         process.exit(0);
