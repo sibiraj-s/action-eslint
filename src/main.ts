@@ -1,4 +1,4 @@
-import { setFailed, getInput, getBooleanInput } from '@actions/core';
+import { setFailed, getInput, getBooleanInput, getMultilineInput } from '@actions/core';
 
 import { Inputs, runEslint } from './eslint';
 
@@ -11,6 +11,7 @@ const run = async ():Promise<void> => {
       rootDir: getInput('root-dir'),
       extensions: getInput('extensions').split(',').map((ext) => ext.trim()),
       ignoreFile: getInput('ignore-file'),
+      ignorePatterns: getMultilineInput('ignore-patterns'),
     };
 
     await runEslint(inputs);

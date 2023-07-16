@@ -25,3 +25,4 @@ jobs:
       - uses: ./
         with:
           extensions: 'js,ts'
+          ignore-patterns: dist/

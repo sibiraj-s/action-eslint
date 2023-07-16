@@ -15,6 +15,7 @@ export interface Inputs {
   rootDir: string;
   extensions: string[];
   ignoreFile: string;
+  ignorePatterns: string[];
 }
 
 export const runEslint = async (inputs: Inputs): Promise<void> => {
@@ -37,6 +38,14 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
     } else {
       notice(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
     }
+  }
+
+  if (inputs.ignorePatterns.length > 0) {
+    startGroup('Using ignore pattern, filtering files changed.');
+    inputs.ignorePatterns.forEach((pattern) => info(`- ${pattern}`));
+    endGroup();
+
+    ig.add(inputs.ignorePatterns);
   }
 
   const files = changedFiles

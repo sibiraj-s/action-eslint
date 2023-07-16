@@ -32,3 +32,6 @@ inputs:
   ignore-file:
     description: Path to ignore file.
     required: false
+  ignore-patterns:
+    description: Patterns to ignore. Similar to eslint ignorePatterns
+    required: false

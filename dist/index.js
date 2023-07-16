@@ -55,6 +55,12 @@ const runEslint = async (inputs) => {
             (0, core_1.notice)(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
         }
     }
+    if (inputs.ignorePatterns.length > 0) {
+        (0, core_1.startGroup)('Using ignore pattern, filtering files changed.');
+        inputs.ignorePatterns.forEach((pattern) => (0, core_1.info)(`- ${pattern}`));
+        (0, core_1.endGroup)();
+        ig.add(inputs.ignorePatterns);
+    }
     const files = changedFiles
         .filter((filename) => {
         const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
@@ -11823,6 +11829,7 @@ const run = async () => {
             rootDir: (0, core_1.getInput)('root-dir'),
             extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
             ignoreFile: (0, core_1.getInput)('ignore-file'),
+            ignorePatterns: (0, core_1.getMultilineInput)('ignore-patterns'),
         };
         await (0, eslint_1.runEslint)(inputs);
         process.exit(0);
