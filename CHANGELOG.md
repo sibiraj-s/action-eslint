@@ -22,6 +22,10 @@ All notable changes to this project will be documented in this file.
 - Add option `ignore-patterns` ([2b3a054](https://github.com/sibiraj-s/action-eslint/commit/2b3a054))
 - Add option `root-dir` ([3cb3ba9](https://github.com/sibiraj-s/action-eslint/commit/3cb3ba9))
 
+#### Bug Fixes
+
+- use correct bin path ([3cb3ba9](https://github.com/sibiraj-s/action-eslint/commit/3cb3ba9))
+
 ## v2.1.2 (2022-08-24)
 
 #### Dependency Updates
