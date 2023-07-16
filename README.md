@@ -30,10 +30,52 @@ jobs:
       - run: npm ci # or yarn install
       - uses: sibiraj-s/action-eslint@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
+          github-token: ${{ secrets.GITHUB_TOKEN }} # optional
           eslint-args: '--ignore-path=.gitignore --quiet'
           extensions: 'js,jsx,ts,tsx'
           annotations: true
+```
+
+### Ignoring files
+
+Ignore files changed in a PR.
+
+```yml
+steps:
+  - uses: sibiraj-s/action-eslint@v2
+    with:
+      ignore-file: .eslintignore
+      ignore-pattern: |
+        dist/
+        lib/
+```
+
+The files that are being filtered based on these options are excluded from the set of changed files before being sent to eslint.
+This feature proves useful in situations where a pull request or commit contains files that should not be linted,
+thus avoiding the occurrence of [ignored file warnings](https://eslint.org/docs/latest/use/configure/ignore#ignored-file-warnings).
+
+You can use this in addition to `ignore-path`/`ignore-patterns` in `eslint-args`.
+
+```yml
+steps:
+  - uses: sibiraj-s/action-eslint@v2
+    with:
+      eslint-args: '--ignore-path=.gitignore --quiet'
+      ignore-file: .eslintignore
+      ignore-pattern: |
+        dist/
+        lib/
+```
+
+### Root directory
+
+This option can be particularly useful when the eslint installation is not located in the root directory.
+
+```yml
+steps:
+  - uses: action@v2
+    with:
+      root-dir: apps/website
 ```
 
 ## Security
