@@ -9,4 +9,3 @@ parserOptions:
 
 ignorePatterns:
   - dist/
-  - lib/
