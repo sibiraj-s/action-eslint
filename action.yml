@@ -27,7 +27,7 @@ inputs:
     description: Enable or disable annotations
     required: false
     default: true
-  bin-path:
-    description: Path to eslint installation directory. Defaults to `node_modules/eslint/bin`
+  root-dir:
+    description: Path to project containing npm/yarn installation
     required: false
-    default: node_modules/eslint/bin
+    default: ''

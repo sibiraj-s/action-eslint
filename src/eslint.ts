@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import ignore from 'ignore';
+
 import { notice, startGroup, endGroup, info } from '@actions/core';
 import { exec } from '@actions/exec';
+import ignore from 'ignore';
 
 import { disableAnnotations } from './annotations';
 import getChangedFiles from './get-changed-files';
@@ -11,7 +12,7 @@ export interface Inputs {
   token: string;
   annotations: boolean;
   eslintArgs: string[];
-  binPath: string;
+  rootDir: string;
   extensions: string[];
 }
 
@@ -49,7 +50,7 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
   endGroup();
 
   const execOptions = [
-    path.resolve(inputs.binPath, 'eslint'),
+    path.resolve(inputs.rootDir, 'node_modules/.bin/eslint'),
     ...files,
     ...inputs.eslintArgs,
   ].filter(Boolean);

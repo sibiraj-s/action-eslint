@@ -31,9 +31,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runEslint = void 0;
 const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
-const ignore_1 = __importDefault(__nccwpck_require__(1230));
 const core_1 = __nccwpck_require__(2186);
 const exec_1 = __nccwpck_require__(1514);
+const ignore_1 = __importDefault(__nccwpck_require__(1230));
 const annotations_1 = __nccwpck_require__(5598);
 const get_changed_files_1 = __importDefault(__nccwpck_require__(7990));
 const runEslint = async (inputs) => {
@@ -63,7 +63,7 @@ const runEslint = async (inputs) => {
     files.forEach((file) => (0, core_1.info)(`- ${file}`));
     (0, core_1.endGroup)();
     const execOptions = [
-        node_path_1.default.resolve(inputs.binPath, 'eslint'),
+        node_path_1.default.resolve(inputs.rootDir, 'node_modules/.bin/eslint'),
         ...files,
         ...inputs.eslintArgs,
     ].filter(Boolean);
@@ -11814,7 +11814,7 @@ const run = async () => {
             token: (0, core_1.getInput)('github-token', { required: true }),
             annotations: (0, core_1.getBooleanInput)('annotations'),
             eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
-            binPath: (0, core_1.getInput)('bin-path'),
+            rootDir: (0, core_1.getInput)('root-dir'),
             extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
         };
         await (0, eslint_1.runEslint)(inputs);
