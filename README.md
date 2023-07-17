@@ -78,7 +78,7 @@ steps:
       root-dir: apps/website
 ```
 
-Note: When using this option, options such as `ignore-file` will be resolved based on the specified directory.
+Note: When using this option, options such as `ignore-file` will be resolved based on the specified directory and files outside this folder will be skipped too.
 
 ## Security
 
