@@ -32,18 +32,19 @@ exports.runEslint = void 0;
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const core_1 = __nccwpck_require__(2186);
 const exec_1 = __nccwpck_require__(1514);
+const inputs_1 = __importDefault(__nccwpck_require__(6180));
 const annotations_1 = __nccwpck_require__(5598);
 const get_changed_files_1 = __importDefault(__nccwpck_require__(7990));
 const ignore_files_1 = __importDefault(__nccwpck_require__(6413));
-const runEslint = async (inputs) => {
-    if (!inputs.annotations) {
+const runEslint = async () => {
+    if (!inputs_1.default.annotations) {
         (0, annotations_1.disableAnnotations)();
     }
-    const changedFiles = await (0, get_changed_files_1.default)(inputs.token);
+    const changedFiles = await (0, get_changed_files_1.default)(inputs_1.default.token);
     (0, core_1.startGroup)('Files changed.');
     changedFiles.forEach((file) => (0, core_1.info)(`- ${file}`));
     (0, core_1.endGroup)();
-    const files = await (0, ignore_files_1.default)(changedFiles, inputs);
+    const files = await (0, ignore_files_1.default)(changedFiles);
     if (files.length === 0) {
         (0, core_1.notice)('No files found. Skipping.');
         return;
@@ -52,9 +53,9 @@ const runEslint = async (inputs) => {
     files.forEach((file) => (0, core_1.info)(`- ${file}`));
     (0, core_1.endGroup)();
     const execOptions = [
-        node_path_1.default.resolve(inputs.workingDirectory, 'node_modules/.bin/eslint'),
+        node_path_1.default.resolve(inputs_1.default.workingDirectory, 'node_modules/.bin/eslint'),
         ...files,
-        ...inputs.eslintArgs,
+        ...inputs_1.default.eslintArgs,
     ].filter(Boolean);
     await (0, exec_1.exec)('node', execOptions);
 };
@@ -117,40 +118,62 @@ const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const ignore_1 = __importDefault(__nccwpck_require__(1230));
 const core_1 = __nccwpck_require__(2186);
-const filterWorkingDirectoryFiles = (workingDirectory, files) => {
-    if (!workingDirectory) {
+const inputs_1 = __importDefault(__nccwpck_require__(6180));
+const filterWorkingDirectoryFiles = (files) => {
+    if (!inputs_1.default.workingDirectory) {
         return files;
     }
-    return files.filter((file) => file.startsWith(workingDirectory));
+    return files.filter((file) => file.startsWith(inputs_1.default.workingDirectory));
 };
-const ignoreFiles = async (changedFiles, inputs) => {
+const ignoreFiles = async (changedFiles) => {
     const ig = (0, ignore_1.default)();
-    const files = filterWorkingDirectoryFiles(inputs.workingDirectory, changedFiles);
-    if (inputs.ignoreFile) {
-        const ignoreFile = node_path_1.default.resolve(inputs.workingDirectory, inputs.ignoreFile);
+    const files = filterWorkingDirectoryFiles(changedFiles);
+    if (inputs_1.default.ignoreFile) {
+        const ignoreFile = node_path_1.default.resolve(inputs_1.default.workingDirectory, inputs_1.default.ignoreFile);
         if (node_fs_1.default.existsSync(ignoreFile)) {
-            (0, core_1.info)(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
+            (0, core_1.info)(`Using ignore file ${inputs_1.default.ignoreFile}, filtering files changed.`);
             const ignoreFileContent = await node_fs_1.default.promises.readFile(ignoreFile, 'utf-8');
             ig.add(ignoreFileContent);
         }
         else {
-            (0, core_1.notice)(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
+            (0, core_1.notice)(`Provided ignore file ${inputs_1.default.ignoreFile} doesn't exist. Skipping...`);
         }
     }
-    if (inputs.ignorePatterns.length > 0) {
+    if (inputs_1.default.ignorePatterns.length > 0) {
         (0, core_1.startGroup)('Using ignore pattern, filtering files changed.');
-        inputs.ignorePatterns.forEach((pattern) => (0, core_1.info)(`- ${pattern}`));
+        inputs_1.default.ignorePatterns.forEach((pattern) => (0, core_1.info)(`- ${pattern}`));
         (0, core_1.endGroup)();
-        ig.add(inputs.ignorePatterns);
+        ig.add(inputs_1.default.ignorePatterns);
     }
     return files
         .filter((filename) => {
-        const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
+        const isFileSupported = inputs_1.default.extensions.find((ext) => filename.endsWith(`.${ext}`));
         return isFileSupported;
     })
         .filter((filename) => !ig.ignores(filename));
 };
 exports["default"] = ignoreFiles;
+
+
+/***/ }),
+
+/***/ 6180:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __nccwpck_require__(2186);
+const inputs = {
+    token: (0, core_1.getInput)('token', { required: true }),
+    annotations: (0, core_1.getBooleanInput)('annotations'),
+    eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
+    workingDirectory: (0, core_1.getInput)('working-directory'),
+    extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
+    ignoreFile: (0, core_1.getInput)('ignore-file'),
+    ignorePatterns: (0, core_1.getMultilineInput)('ignore-patterns'),
+};
+exports["default"] = inputs;
 
 
 /***/ }),
@@ -11850,16 +11873,7 @@ const core_1 = __nccwpck_require__(2186);
 const eslint_1 = __nccwpck_require__(5764);
 const run = async () => {
     try {
-        const inputs = {
-            token: (0, core_1.getInput)('token', { required: true }),
-            annotations: (0, core_1.getBooleanInput)('annotations'),
-            eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
-            workingDirectory: (0, core_1.getInput)('working-directory'),
-            extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
-            ignoreFile: (0, core_1.getInput)('ignore-file'),
-            ignorePatterns: (0, core_1.getMultilineInput)('ignore-patterns'),
-        };
-        await (0, eslint_1.runEslint)(inputs);
+        await (0, eslint_1.runEslint)();
         process.exit(0);
     }
     catch (err) {

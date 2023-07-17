@@ -4,20 +4,21 @@ import path from 'node:path';
 import ignore from 'ignore';
 import { notice, startGroup, endGroup, info } from '@actions/core';
 
-import { FileNamesList, Inputs } from './types';
+import { FileNamesList } from './types';
+import inputs from './inputs';
 
-const filterWorkingDirectoryFiles = (workingDirectory: Inputs['workingDirectory'], files: FileNamesList) => {
-  if (!workingDirectory) {
+const filterWorkingDirectoryFiles = (files: FileNamesList) => {
+  if (!inputs.workingDirectory) {
     return files;
   }
 
-  return files.filter((file) => file.startsWith(workingDirectory));
+  return files.filter((file) => file.startsWith(inputs.workingDirectory));
 };
 
-const ignoreFiles = async (changedFiles: FileNamesList, inputs: Inputs): Promise<FileNamesList> => {
+const ignoreFiles = async (changedFiles: FileNamesList): Promise<FileNamesList> => {
   const ig = ignore();
 
-  const files = filterWorkingDirectoryFiles(inputs.workingDirectory, changedFiles);
+  const files = filterWorkingDirectoryFiles(changedFiles);
 
   if (inputs.ignoreFile) {
     const ignoreFile = path.resolve(inputs.workingDirectory, inputs.ignoreFile);
