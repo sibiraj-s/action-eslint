@@ -6,7 +6,7 @@ import { runEslint } from './eslint';
 const run = async ():Promise<void> => {
   try {
     const inputs: Inputs = {
-      token: getInput('github-token', { required: true }),
+      token: getInput('token', { required: true }),
       annotations: getBooleanInput('annotations'),
       eslintArgs: getInput('eslint-args').split(' '),
       workingDirectory: getInput('working-directory'),

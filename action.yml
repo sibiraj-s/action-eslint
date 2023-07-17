@@ -11,7 +11,7 @@ runs:
   main: 'dist/index.js'
 
 inputs:
-  github-token:
+  token:
     description: The GitHub token used to create an authenticated client
     required: false
     default: ${{ github.token }}

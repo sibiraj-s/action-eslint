@@ -11851,7 +11851,7 @@ const eslint_1 = __nccwpck_require__(5764);
 const run = async () => {
     try {
         const inputs = {
-            token: (0, core_1.getInput)('github-token', { required: true }),
+            token: (0, core_1.getInput)('token', { required: true }),
             annotations: (0, core_1.getBooleanInput)('annotations'),
             eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
             workingDirectory: (0, core_1.getInput)('working-directory'),
