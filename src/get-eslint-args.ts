@@ -8,8 +8,8 @@ const getEslintArgs = (): string[] => {
   const args = [...inputs.eslintArgs];
 
   if (inputs.allFiles) {
-    if (!hasArg('ignore-path') && inputs.ignoreFile) {
-      const ignoreFilePath = resovlePath(inputs.ignoreFile);
+    if (!hasArg('ignore-path') && inputs.ignorePath) {
+      const ignoreFilePath = resovlePath(inputs.ignorePath);
       args.push(`--ignore-path=${ignoreFilePath}`);
     }
 

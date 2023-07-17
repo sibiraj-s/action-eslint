@@ -20,15 +20,15 @@ const ignoreFiles = async (changedFiles: FileNamesList): Promise<FileNamesList> 
 
   const files = filterWorkingDirectoryFiles(changedFiles);
 
-  if (inputs.ignoreFile) {
-    const ignoreFile = resovlePath(inputs.ignoreFile);
+  if (inputs.ignorePath) {
+    const ignoreFile = resovlePath(inputs.ignorePath);
 
     if (fs.existsSync(ignoreFile)) {
-      info(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
+      info(`Using ignore file ${inputs.ignorePath}, filtering files changed.`);
       const ignoreFileContent = await fs.promises.readFile(ignoreFile, 'utf-8');
       ig.add(ignoreFileContent);
     } else {
-      notice(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
+      notice(`Provided ignore file ${inputs.ignorePath} doesn't exist. Skipping...`);
     }
   }
 

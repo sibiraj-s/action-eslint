@@ -29,7 +29,7 @@ inputs:
   working-directory:
     description: Path to project containing npm/yarn installation
     required: false
-  ignore-file:
+  ignore-path:
     description: Path to ignore file.
     required: false
   ignore-patterns:

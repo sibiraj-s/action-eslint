@@ -4,7 +4,7 @@ export interface Inputs {
   eslintArgs: string[];
   workingDirectory: string;
   extensions: string[];
-  ignoreFile: string;
+  ignorePath: string;
   ignorePatterns: string[];
   allFiles: string;
 }

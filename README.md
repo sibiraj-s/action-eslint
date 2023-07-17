@@ -44,7 +44,7 @@ Ignore files changed in a PR.
 steps:
   - uses: sibiraj-s/action-eslint@v3
     with:
-      ignore-file: .eslintignore
+      ignore-path: .eslintignore
       ignore-pattern: |
         dist/
         lib/
@@ -61,7 +61,7 @@ steps:
   - uses: sibiraj-s/action-eslint@v3
     with:
       eslint-args: '--ignore-path=.gitignore --quiet'
-      ignore-file: .eslintignore
+      ignore-path: .eslintignore
       ignore-pattern: |
         dist/
         lib/
@@ -78,7 +78,7 @@ steps:
       working-dir: apps/website
 ```
 
-Note: When using this option, options such as `ignore-file` will be resolved based on the specified directory and files outside this folder will be skipped too.
+Note: When using this option, options such as `ignore-path` will be resolved based on the specified directory and files outside this folder will be skipped too.
 
 ## Security
 

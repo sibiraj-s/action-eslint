@@ -120,8 +120,8 @@ const hasArg = (searchArg) => {
 const getEslintArgs = () => {
     const args = [...inputs_1.default.eslintArgs];
     if (inputs_1.default.allFiles) {
-        if (!hasArg('ignore-path') && inputs_1.default.ignoreFile) {
-            const ignoreFilePath = (0, path_1.resovlePath)(inputs_1.default.ignoreFile);
+        if (!hasArg('ignore-path') && inputs_1.default.ignorePath) {
+            const ignoreFilePath = (0, path_1.resovlePath)(inputs_1.default.ignorePath);
             args.push(`--ignore-path=${ignoreFilePath}`);
         }
         if (!hasArg('ignore-patterns') && inputs_1.default.ignorePatterns.length > 0) {
@@ -196,15 +196,15 @@ const filterWorkingDirectoryFiles = (files) => {
 const ignoreFiles = async (changedFiles) => {
     const ig = (0, ignore_1.default)();
     const files = filterWorkingDirectoryFiles(changedFiles);
-    if (inputs_1.default.ignoreFile) {
-        const ignoreFile = (0, path_1.resovlePath)(inputs_1.default.ignoreFile);
+    if (inputs_1.default.ignorePath) {
+        const ignoreFile = (0, path_1.resovlePath)(inputs_1.default.ignorePath);
         if (node_fs_1.default.existsSync(ignoreFile)) {
-            (0, core_1.info)(`Using ignore file ${inputs_1.default.ignoreFile}, filtering files changed.`);
+            (0, core_1.info)(`Using ignore file ${inputs_1.default.ignorePath}, filtering files changed.`);
             const ignoreFileContent = await node_fs_1.default.promises.readFile(ignoreFile, 'utf-8');
             ig.add(ignoreFileContent);
         }
         else {
-            (0, core_1.notice)(`Provided ignore file ${inputs_1.default.ignoreFile} doesn't exist. Skipping...`);
+            (0, core_1.notice)(`Provided ignore file ${inputs_1.default.ignorePath} doesn't exist. Skipping...`);
         }
     }
     if (inputs_1.default.ignorePatterns.length > 0) {
@@ -238,7 +238,7 @@ const inputs = {
     eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
     workingDirectory: (0, core_1.getInput)('working-directory'),
     extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
-    ignoreFile: (0, core_1.getInput)('ignore-file'),
+    ignorePath: (0, core_1.getInput)('ignore-path'),
     ignorePatterns: (0, core_1.getMultilineInput)('ignore-patterns'),
     allFiles: (0, core_1.getInput)('all-files'),
 };

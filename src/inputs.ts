@@ -8,7 +8,7 @@ const inputs: Inputs = {
   eslintArgs: getInput('eslint-args').split(' '),
   workingDirectory: getInput('working-directory'),
   extensions: getInput('extensions').split(',').map((ext) => ext.trim()),
-  ignoreFile: getInput('ignore-file'),
+  ignorePath: getInput('ignore-path'),
   ignorePatterns: getMultilineInput('ignore-patterns'),
   allFiles: getInput('all-files'),
 };
