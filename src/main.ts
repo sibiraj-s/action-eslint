@@ -9,7 +9,7 @@ const run = async ():Promise<void> => {
       token: getInput('github-token', { required: true }),
       annotations: getBooleanInput('annotations'),
       eslintArgs: getInput('eslint-args').split(' '),
-      rootDir: getInput('root-dir'),
+      workingDirectory: getInput('working-directory'),
       extensions: getInput('extensions').split(',').map((ext) => ext.trim()),
       ignoreFile: getInput('ignore-file'),
       ignorePatterns: getMultilineInput('ignore-patterns'),

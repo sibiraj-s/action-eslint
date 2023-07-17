@@ -2,7 +2,7 @@ export interface Inputs {
   token: string;
   annotations: boolean;
   eslintArgs: string[];
-  rootDir: string;
+  workingDirectory: string;
   extensions: string[];
   ignoreFile: string;
   ignorePatterns: string[];

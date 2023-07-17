@@ -31,7 +31,7 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
   endGroup();
 
   const execOptions = [
-    path.resolve(inputs.rootDir, 'node_modules/.bin/eslint'),
+    path.resolve(inputs.workingDirectory, 'node_modules/.bin/eslint'),
     ...files,
     ...inputs.eslintArgs,
   ].filter(Boolean);

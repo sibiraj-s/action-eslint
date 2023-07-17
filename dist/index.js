@@ -52,7 +52,7 @@ const runEslint = async (inputs) => {
     files.forEach((file) => (0, core_1.info)(`- ${file}`));
     (0, core_1.endGroup)();
     const execOptions = [
-        node_path_1.default.resolve(inputs.rootDir, 'node_modules/.bin/eslint'),
+        node_path_1.default.resolve(inputs.workingDirectory, 'node_modules/.bin/eslint'),
         ...files,
         ...inputs.eslintArgs,
     ].filter(Boolean);
@@ -117,17 +117,17 @@ const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const ignore_1 = __importDefault(__nccwpck_require__(1230));
 const core_1 = __nccwpck_require__(2186);
-const filterRootDirFiles = (rootDir, files) => {
-    if (!rootDir) {
+const filterWorkingDirectoryFiles = (workingDirectory, files) => {
+    if (!workingDirectory) {
         return files;
     }
-    return files.filter((file) => file.startsWith(rootDir));
+    return files.filter((file) => file.startsWith(workingDirectory));
 };
 const ignoreFiles = async (changedFiles, inputs) => {
     const ig = (0, ignore_1.default)();
-    const files = filterRootDirFiles(inputs.rootDir, changedFiles);
+    const files = filterWorkingDirectoryFiles(inputs.workingDirectory, changedFiles);
     if (inputs.ignoreFile) {
-        const ignoreFile = node_path_1.default.resolve(inputs.rootDir, inputs.ignoreFile);
+        const ignoreFile = node_path_1.default.resolve(inputs.workingDirectory, inputs.ignoreFile);
         if (node_fs_1.default.existsSync(ignoreFile)) {
             (0, core_1.info)(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
             const ignoreFileContent = await node_fs_1.default.promises.readFile(ignoreFile, 'utf-8');
@@ -11854,7 +11854,7 @@ const run = async () => {
             token: (0, core_1.getInput)('github-token', { required: true }),
             annotations: (0, core_1.getBooleanInput)('annotations'),
             eslintArgs: (0, core_1.getInput)('eslint-args').split(' '),
-            rootDir: (0, core_1.getInput)('root-dir'),
+            workingDirectory: (0, core_1.getInput)('working-directory'),
             extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
             ignoreFile: (0, core_1.getInput)('ignore-file'),
             ignorePatterns: (0, core_1.getMultilineInput)('ignore-patterns'),

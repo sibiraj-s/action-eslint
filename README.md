@@ -67,15 +67,15 @@ steps:
         lib/
 ```
 
-### Root directory
+### Working directory
 
-The `root-dir` option can be especially useful when the eslint installation is not located in the root directory.
+The `working-dir` option can be especially useful when the eslint installation is not located in the root directory.
 
 ```yaml
 steps:
   - uses: action@v2
     with:
-      root-dir: apps/website
+      working-dir: apps/website
 ```
 
 Note: When using this option, options such as `ignore-file` will be resolved based on the specified directory and files outside this folder will be skipped too.

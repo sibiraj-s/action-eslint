@@ -26,7 +26,7 @@ inputs:
     description: Enable or disable annotations
     required: false
     default: true
-  root-dir:
+  working-directory:
     description: Path to project containing npm/yarn installation
     required: false
   ignore-file:
