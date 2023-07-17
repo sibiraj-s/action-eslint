@@ -50,9 +50,9 @@ steps:
         lib/
 ```
 
-The files that are being filtered based on these options are excluded from the set of changed files before being sent to eslint.
-This feature proves useful in situations where a pull request or commit contains files that should not be linted,
-thus avoiding the occurrence of [ignored file warnings](https://eslint.org/docs/latest/use/configure/ignore#ignored-file-warnings).
+The files that are being filtered based on these options are excluded from the set of changed files before being sent to
+eslint. This feature proves useful in situations where a pull request or commit contains files that should not be
+linted, thus avoiding the occurrence of [ignored file warnings](https://eslint.org/docs/latest/use/configure/ignore#ignored-file-warnings).
 
 You can use this in addition to `ignore-path`/`ignore-patterns` in `eslint-args`.
 
@@ -71,14 +71,58 @@ steps:
 
 The `working-dir` option can be especially useful when the eslint installation is not located in the root directory.
 
-```yaml
+```yml
 steps:
   - uses: action@v2
     with:
       working-dir: apps/website
 ```
 
-Note: When using this option, options such as `ignore-path` will be resolved based on the specified directory and files outside this folder will be skipped too.
+Note: When using this option, options such as `ignore-path` will be resolved based on the specified directory and files
+outside this folder will be skipped too.
+
+### Running linters on all files
+
+Typically, if you only want to run eslint on all files, this action is unnecessary. However, there are specific situations,
+such as when a change is made to the `.eslintrc` file, where you may want to lint all files.
+
+```yml
+steps:
+  - uses: action@v2
+    with:
+      all-files: true
+```
+
+Note: When using this input, if the `eslint-args` has the `ignore-path` option the input `ingore-path` will be ignored
+
+```yml
+steps:
+  - uses: action@v2
+    with:
+      all-files: true
+      eslint-args: '--ignore-path=.gitignore --quiet'
+      ignore-path: .eslintignore # will be ignored since ignore-path is already given in eslint-args
+```
+
+Example to Run lint on all files when `.eslintrc` changes
+
+```yml
+steps:
+  - uses: actions/checkout@v3
+  - uses: dorny/paths-filter@v2
+    id: filter
+    with:
+      filters: |
+        eslintrc:
+          - '.eslintrc*'
+
+  # run eslint on all files if eslintrc changes
+  - name: Run eslint on changed files
+    if: steps.filter.outputs.eslintrc == 'false'
+    uses: sibiraj-s/action-eslint@v2
+    with:
+      all-files: ${{ steps.filter.outputs.eslintrc == 'true' }}
+```
 
 ## Security
 
@@ -92,4 +136,5 @@ Read more on [using third-party actions](https://docs.github.com/en/actions/lear
 
 ## Debugging
 
-To enable debug logs, set secret `ACTIONS_STEP_DEBUG` to `true`. Refer docs more details https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging#enabling-step-debug-logging
+To enable debug logs, set secret `ACTIONS_STEP_DEBUG` to `true`. Refer docs more details
+https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging#enabling-step-debug-logging
