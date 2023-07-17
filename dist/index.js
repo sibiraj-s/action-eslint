@@ -117,8 +117,15 @@ const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const ignore_1 = __importDefault(__nccwpck_require__(1230));
 const core_1 = __nccwpck_require__(2186);
+const filterRootDirFiles = (rootDir, files) => {
+    if (!rootDir) {
+        return files;
+    }
+    return files.filter((file) => file.startsWith(rootDir));
+};
 const ignoreFiles = async (changedFiles, inputs) => {
     const ig = (0, ignore_1.default)();
+    const files = filterRootDirFiles(inputs.rootDir, changedFiles);
     if (inputs.ignoreFile) {
         const ignoreFile = node_path_1.default.resolve(inputs.rootDir, inputs.ignoreFile);
         if (node_fs_1.default.existsSync(ignoreFile)) {
@@ -136,13 +143,12 @@ const ignoreFiles = async (changedFiles, inputs) => {
         (0, core_1.endGroup)();
         ig.add(inputs.ignorePatterns);
     }
-    const files = changedFiles
+    return files
         .filter((filename) => {
         const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
         return isFileSupported;
     })
         .filter((filename) => !ig.ignores(filename));
-    return files;
 };
 exports["default"] = ignoreFiles;
 

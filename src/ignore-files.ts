@@ -6,8 +6,18 @@ import { notice, startGroup, endGroup, info } from '@actions/core';
 
 import { FileNamesList, Inputs } from './types';
 
+const filterRootDirFiles = (rootDir:Inputs['rootDir'], files: FileNamesList) => {
+  if (!rootDir) {
+    return files;
+  }
+
+  return files.filter((file) => file.startsWith(rootDir));
+};
+
 const ignoreFiles = async (changedFiles: FileNamesList, inputs: Inputs): Promise<FileNamesList> => {
   const ig = ignore();
+
+  const files = filterRootDirFiles(inputs.rootDir, changedFiles);
 
   if (inputs.ignoreFile) {
     const ignoreFile = path.resolve(inputs.rootDir, inputs.ignoreFile);
@@ -28,14 +38,12 @@ const ignoreFiles = async (changedFiles: FileNamesList, inputs: Inputs): Promise
     ig.add(inputs.ignorePatterns);
   }
 
-  const files = changedFiles
+  return files
     .filter((filename) => {
       const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
       return isFileSupported;
     })
     .filter((filename) => !ig.ignores(filename));
-
-  return files;
 };
 
 export default ignoreFiles;
