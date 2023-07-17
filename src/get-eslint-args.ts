@@ -13,13 +13,13 @@ const getEslintArgs = (): string[] => {
       args.push(`--ignore-path=${ignoreFilePath}`);
     }
 
-    if (!hasArg('ignore-patterns') && inputs.ignorePatterns.length > 0) {
+    if (inputs.ignorePatterns.length > 0) {
       inputs.ignorePatterns.forEach((pattern) => {
         args.push(`--ignore-pattern=${pattern}`);
       });
     }
 
-    if (!hasArg('ext') && inputs.extensions.length > 0) {
+    if (inputs.extensions.length > 0) {
       inputs.extensions.forEach((ext) => {
         args.push(`--ext=.${ext}`);
       });

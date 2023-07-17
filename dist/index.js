@@ -124,12 +124,12 @@ const getEslintArgs = () => {
             const ignoreFilePath = (0, path_1.resovlePath)(inputs_1.default.ignorePath);
             args.push(`--ignore-path=${ignoreFilePath}`);
         }
-        if (!hasArg('ignore-patterns') && inputs_1.default.ignorePatterns.length > 0) {
+        if (inputs_1.default.ignorePatterns.length > 0) {
             inputs_1.default.ignorePatterns.forEach((pattern) => {
                 args.push(`--ignore-pattern=${pattern}`);
             });
         }
-        if (!hasArg('ext') && inputs_1.default.extensions.length > 0) {
+        if (inputs_1.default.extensions.length > 0) {
             inputs_1.default.extensions.forEach((ext) => {
                 args.push(`--ext=.${ext}`);
             });
