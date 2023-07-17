@@ -14,6 +14,12 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v2.2.1 (2023-07-17)
+
+#### Bug Fixes
+
+- filter files correctly when the root-dir option is set ([d9bb279](https://github.com/sibiraj-s/action-eslint/commit/d9bb279))
+
 ## v2.2.0 (2023-07-16)
 
 #### Features
