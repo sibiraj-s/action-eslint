@@ -81,7 +81,7 @@ steps:
 Note: When using this option, options such as `ignore-path` will be resolved based on the specified directory and files
 outside this folder will be skipped too.
 
-### Running linters on all files
+### Running linter on all files
 
 Typically, if you only want to run eslint on all files, this action is unnecessary. However, there are specific situations,
 such as when a change is made to the `.eslintrc` file, where you may want to lint all files.
