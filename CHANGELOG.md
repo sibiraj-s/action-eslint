@@ -14,11 +14,23 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v3.0.0 (2023-07-17)
+
+#### Breaking Changes
+
+- Rename input `root-dir` to `working-directory` ([dd4ab68](https://github.com/sibiraj-s/action-eslint/commit/dd4ab68))
+- Rename input `github-token` to `token` ([2a30aa5](https://github.com/sibiraj-s/action-eslint/commit/2a30aa5))
+- Rename input `ignore-file` to `ignore-path` ([d025a5d](https://github.com/sibiraj-s/action-eslint/commit/d025a5d))
+
+#### Features
+
+- Add option to lint all files ([5e82983](https://github.com/sibiraj-s/action-eslint/commit/5e82983))
+
 ## v2.2.1 (2023-07-17)
 
 #### Bug Fixes
 
-- filter files correctly when the root-dir option is set ([d9bb279](https://github.com/sibiraj-s/action-eslint/commit/d9bb279))
+- Filter files correctly when the root-dir option is set ([d9bb279](https://github.com/sibiraj-s/action-eslint/commit/d9bb279))
 
 ## v2.2.0 (2023-07-16)
 
@@ -30,7 +42,7 @@ All notable changes to this project will be documented in this file.
 
 #### Bug Fixes
 
-- use correct bin path ([3cb3ba9](https://github.com/sibiraj-s/action-eslint/commit/3cb3ba9))
+- Use correct bin path ([3cb3ba9](https://github.com/sibiraj-s/action-eslint/commit/3cb3ba9))
 
 ## v2.1.2 (2022-08-24)
 
