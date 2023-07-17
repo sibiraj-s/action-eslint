@@ -6,6 +6,7 @@ export interface Inputs {
   extensions: string[];
   ignoreFile: string;
   ignorePatterns: string[];
+  allFiles: string;
 }
 
 export type FileNamesList = string[];

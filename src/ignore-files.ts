@@ -1,11 +1,11 @@
 import fs from 'node:fs';
-import path from 'node:path';
 
 import ignore from 'ignore';
 import { notice, startGroup, endGroup, info } from '@actions/core';
 
 import { FileNamesList } from './types';
 import inputs from './inputs';
+import { resovlePath } from './path';
 
 const filterWorkingDirectoryFiles = (files: FileNamesList) => {
   if (!inputs.workingDirectory) {
@@ -21,7 +21,8 @@ const ignoreFiles = async (changedFiles: FileNamesList): Promise<FileNamesList> 
   const files = filterWorkingDirectoryFiles(changedFiles);
 
   if (inputs.ignoreFile) {
-    const ignoreFile = path.resolve(inputs.workingDirectory, inputs.ignoreFile);
+    const ignoreFile = resovlePath(inputs.ignoreFile);
+
     if (fs.existsSync(ignoreFile)) {
       info(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
       const ignoreFileContent = await fs.promises.readFile(ignoreFile, 'utf-8');

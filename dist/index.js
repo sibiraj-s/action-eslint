@@ -34,28 +34,22 @@ const core_1 = __nccwpck_require__(2186);
 const exec_1 = __nccwpck_require__(1514);
 const inputs_1 = __importDefault(__nccwpck_require__(6180));
 const annotations_1 = __nccwpck_require__(5598);
-const get_changed_files_1 = __importDefault(__nccwpck_require__(7990));
-const ignore_files_1 = __importDefault(__nccwpck_require__(6413));
+const get_files_1 = __importDefault(__nccwpck_require__(8052));
+const get_eslint_args_1 = __importDefault(__nccwpck_require__(656));
 const runEslint = async () => {
     if (!inputs_1.default.annotations) {
         (0, annotations_1.disableAnnotations)();
     }
-    const changedFiles = await (0, get_changed_files_1.default)(inputs_1.default.token);
-    (0, core_1.startGroup)('Files changed.');
-    changedFiles.forEach((file) => (0, core_1.info)(`- ${file}`));
-    (0, core_1.endGroup)();
-    const files = await (0, ignore_files_1.default)(changedFiles);
+    const files = await (0, get_files_1.default)();
     if (files.length === 0) {
         (0, core_1.notice)('No files found. Skipping.');
         return;
     }
-    (0, core_1.startGroup)('Files for linting.');
-    files.forEach((file) => (0, core_1.info)(`- ${file}`));
-    (0, core_1.endGroup)();
+    const eslintArgs = (0, get_eslint_args_1.default)();
     const execOptions = [
         node_path_1.default.resolve(inputs_1.default.workingDirectory, 'node_modules/.bin/eslint'),
         ...files,
-        ...inputs_1.default.eslintArgs,
+        ...eslintArgs,
     ].filter(Boolean);
     await (0, exec_1.exec)('node', execOptions);
 };
@@ -65,17 +59,21 @@ exports.runEslint = runEslint;
 /***/ }),
 
 /***/ 7990:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github_1 = __nccwpck_require__(5438);
+const inputs_1 = __importDefault(__nccwpck_require__(6180));
 const getFileNames = (files) => files
     .filter((file) => file.status !== 'removed')
     .map((file) => file.filename);
-const getChangedFiles = async (token) => {
-    const octokit = (0, github_1.getOctokit)(token);
+const getChangedFiles = async () => {
+    const octokit = (0, github_1.getOctokit)(inputs_1.default.token);
     const pullRequest = github_1.context.payload.pull_request;
     let filenames = [];
     if (!(pullRequest === null || pullRequest === void 0 ? void 0 : pullRequest.number)) {
@@ -105,6 +103,76 @@ exports["default"] = getChangedFiles;
 
 /***/ }),
 
+/***/ 656:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const inputs_1 = __importDefault(__nccwpck_require__(6180));
+const path_1 = __nccwpck_require__(13);
+const hasArg = (searchArg) => {
+    return inputs_1.default.eslintArgs.some((arg) => arg.indexOf(`--${searchArg}`) !== -1);
+};
+const getEslintArgs = () => {
+    const args = [...inputs_1.default.eslintArgs];
+    if (inputs_1.default.allFiles) {
+        if (!hasArg('ignore-path') && inputs_1.default.ignoreFile) {
+            const ignoreFilePath = (0, path_1.resovlePath)(inputs_1.default.ignoreFile);
+            args.push(`--ignore-path=${ignoreFilePath}`);
+        }
+        if (!hasArg('ignore-patterns') && inputs_1.default.ignorePatterns.length > 0) {
+            inputs_1.default.ignorePatterns.forEach((pattern) => {
+                args.push(`--ignore-pattern=${pattern}`);
+            });
+        }
+        if (!hasArg('ext') && inputs_1.default.extensions.length > 0) {
+            inputs_1.default.extensions.forEach((ext) => {
+                args.push(`--ext=.${ext}`);
+            });
+        }
+    }
+    return args;
+};
+exports["default"] = getEslintArgs;
+
+
+/***/ }),
+
+/***/ 8052:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __nccwpck_require__(2186);
+const inputs_1 = __importDefault(__nccwpck_require__(6180));
+const get_changed_files_1 = __importDefault(__nccwpck_require__(7990));
+const print_1 = __nccwpck_require__(7787);
+const ignore_files_1 = __importDefault(__nccwpck_require__(6413));
+const getFiles = async () => {
+    if (inputs_1.default.allFiles) {
+        (0, core_1.info)('Linting all files.');
+        return ['.'];
+    }
+    (0, core_1.info)('Linting changed files.');
+    const changedFiles = await (0, get_changed_files_1.default)();
+    (0, print_1.printItems)('Files changed.', changedFiles);
+    const files = await (0, ignore_files_1.default)(changedFiles);
+    (0, print_1.printItems)('Files for linting', files);
+    return files;
+};
+exports["default"] = getFiles;
+
+
+/***/ }),
+
 /***/ 6413:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -115,10 +183,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const node_fs_1 = __importDefault(__nccwpck_require__(7561));
-const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const ignore_1 = __importDefault(__nccwpck_require__(1230));
 const core_1 = __nccwpck_require__(2186);
 const inputs_1 = __importDefault(__nccwpck_require__(6180));
+const path_1 = __nccwpck_require__(13);
 const filterWorkingDirectoryFiles = (files) => {
     if (!inputs_1.default.workingDirectory) {
         return files;
@@ -129,7 +197,7 @@ const ignoreFiles = async (changedFiles) => {
     const ig = (0, ignore_1.default)();
     const files = filterWorkingDirectoryFiles(changedFiles);
     if (inputs_1.default.ignoreFile) {
-        const ignoreFile = node_path_1.default.resolve(inputs_1.default.workingDirectory, inputs_1.default.ignoreFile);
+        const ignoreFile = (0, path_1.resovlePath)(inputs_1.default.ignoreFile);
         if (node_fs_1.default.existsSync(ignoreFile)) {
             (0, core_1.info)(`Using ignore file ${inputs_1.default.ignoreFile}, filtering files changed.`);
             const ignoreFileContent = await node_fs_1.default.promises.readFile(ignoreFile, 'utf-8');
@@ -172,8 +240,51 @@ const inputs = {
     extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
     ignoreFile: (0, core_1.getInput)('ignore-file'),
     ignorePatterns: (0, core_1.getMultilineInput)('ignore-patterns'),
+    allFiles: (0, core_1.getInput)('all-files'),
 };
 exports["default"] = inputs;
+
+
+/***/ }),
+
+/***/ 13:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.resovlePath = void 0;
+const node_path_1 = __importDefault(__nccwpck_require__(9411));
+const inputs_1 = __importDefault(__nccwpck_require__(6180));
+const resovlePath = (pathStr) => {
+    return node_path_1.default.resolve(inputs_1.default.workingDirectory, pathStr);
+};
+exports.resovlePath = resovlePath;
+
+
+/***/ }),
+
+/***/ 7787:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.printItems = void 0;
+const core_1 = __nccwpck_require__(2186);
+const console_1 = __nccwpck_require__(6206);
+const printItems = (name, items) => {
+    if (items.length === 0) {
+        return;
+    }
+    (0, core_1.startGroup)('Files for linting.');
+    items.forEach((item) => (0, console_1.info)(`- ${item}`));
+    (0, core_1.endGroup)();
+};
+exports.printItems = printItems;
 
 
 /***/ }),
@@ -11669,6 +11780,14 @@ module.exports = require("assert");
 
 "use strict";
 module.exports = require("child_process");
+
+/***/ }),
+
+/***/ 6206:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("console");
 
 /***/ }),
 

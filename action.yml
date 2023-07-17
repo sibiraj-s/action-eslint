@@ -35,3 +35,7 @@ inputs:
   ignore-patterns:
     description: Patterns to ignore. Similar to eslint ignorePatterns
     required: false
+  all-files:
+    description: Run eslint on all files.
+    required: false
+    default: false

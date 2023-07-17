@@ -2,13 +2,14 @@ import { getOctokit, context } from '@actions/github';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 
 import { File, FileNamesList } from './types';
+import inputs from './inputs';
 
 const getFileNames = (files: File[]): FileNamesList => files
   .filter((file) => file.status !== 'removed')
   .map((file) => file.filename);
 
-const getChangedFiles = async (token: string): Promise<FileNamesList> => {
-  const octokit = getOctokit(token);
+const getChangedFiles = async (): Promise<FileNamesList> => {
+  const octokit = getOctokit(inputs.token);
   const pullRequest = context.payload.pull_request;
 
   let filenames: FileNamesList = [];
