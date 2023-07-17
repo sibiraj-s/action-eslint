@@ -1,6 +1,7 @@
 import { setFailed, getInput, getBooleanInput, getMultilineInput } from '@actions/core';
 
-import { Inputs, runEslint } from './eslint';
+import { Inputs } from './types';
+import { runEslint } from './eslint';
 
 const run = async ():Promise<void> => {
   try {

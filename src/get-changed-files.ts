@@ -1,12 +1,7 @@
 import { getOctokit, context } from '@actions/github';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 
-type FileNamesList = string[];
-
-type File = {
-  filename: string;
-  status: string;
-};
+import { File, FileNamesList } from './types';
 
 const getFileNames = (files: File[]): FileNamesList => files
   .filter((file) => file.status !== 'removed')

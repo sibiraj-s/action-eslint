@@ -1,22 +1,12 @@
-import fs from 'node:fs';
 import path from 'node:path';
 
 import { notice, startGroup, endGroup, info } from '@actions/core';
 import { exec } from '@actions/exec';
-import ignore from 'ignore';
 
+import { Inputs } from './types';
 import { disableAnnotations } from './annotations';
 import getChangedFiles from './get-changed-files';
-
-export interface Inputs {
-  token: string;
-  annotations: boolean;
-  eslintArgs: string[];
-  rootDir: string;
-  extensions: string[];
-  ignoreFile: string;
-  ignorePatterns: string[];
-}
+import ignoreFiles from './ignore-files';
 
 export const runEslint = async (inputs: Inputs): Promise<void> => {
   if (!inputs.annotations) {
@@ -29,33 +19,7 @@ export const runEslint = async (inputs: Inputs): Promise<void> => {
   changedFiles.forEach((file) => info(`- ${file}`));
   endGroup();
 
-  const ig = ignore();
-
-  if (inputs.ignoreFile) {
-    const ignoreFile = path.resolve(inputs.rootDir, inputs.ignoreFile);
-    if (fs.existsSync(ignoreFile)) {
-      info(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
-      const ignoreFileContent = await fs.promises.readFile(ignoreFile, 'utf-8');
-      ig.add(ignoreFileContent);
-    } else {
-      notice(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
-    }
-  }
-
-  if (inputs.ignorePatterns.length > 0) {
-    startGroup('Using ignore pattern, filtering files changed.');
-    inputs.ignorePatterns.forEach((pattern) => info(`- ${pattern}`));
-    endGroup();
-
-    ig.add(inputs.ignorePatterns);
-  }
-
-  const files = changedFiles
-    .filter((filename) => {
-      const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
-      return isFileSupported;
-    })
-    .filter((filename) => !ig.ignores(filename));
+  const files = await ignoreFiles(changedFiles, inputs);
 
   if (files.length === 0) {
     notice('No files found. Skipping.');

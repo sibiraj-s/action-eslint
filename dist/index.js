@@ -29,13 +29,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runEslint = void 0;
-const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const core_1 = __nccwpck_require__(2186);
 const exec_1 = __nccwpck_require__(1514);
-const ignore_1 = __importDefault(__nccwpck_require__(1230));
 const annotations_1 = __nccwpck_require__(5598);
 const get_changed_files_1 = __importDefault(__nccwpck_require__(7990));
+const ignore_files_1 = __importDefault(__nccwpck_require__(6413));
 const runEslint = async (inputs) => {
     if (!inputs.annotations) {
         (0, annotations_1.disableAnnotations)();
@@ -44,30 +43,7 @@ const runEslint = async (inputs) => {
     (0, core_1.startGroup)('Files changed.');
     changedFiles.forEach((file) => (0, core_1.info)(`- ${file}`));
     (0, core_1.endGroup)();
-    const ig = (0, ignore_1.default)();
-    if (inputs.ignoreFile) {
-        const ignoreFile = node_path_1.default.resolve(inputs.rootDir, inputs.ignoreFile);
-        if (node_fs_1.default.existsSync(ignoreFile)) {
-            (0, core_1.info)(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
-            const ignoreFileContent = await node_fs_1.default.promises.readFile(ignoreFile, 'utf-8');
-            ig.add(ignoreFileContent);
-        }
-        else {
-            (0, core_1.notice)(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
-        }
-    }
-    if (inputs.ignorePatterns.length > 0) {
-        (0, core_1.startGroup)('Using ignore pattern, filtering files changed.');
-        inputs.ignorePatterns.forEach((pattern) => (0, core_1.info)(`- ${pattern}`));
-        (0, core_1.endGroup)();
-        ig.add(inputs.ignorePatterns);
-    }
-    const files = changedFiles
-        .filter((filename) => {
-        const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
-        return isFileSupported;
-    })
-        .filter((filename) => !ig.ignores(filename));
+    const files = await (0, ignore_files_1.default)(changedFiles, inputs);
     if (files.length === 0) {
         (0, core_1.notice)('No files found. Skipping.');
         return;
@@ -124,6 +100,51 @@ const getChangedFiles = async (token) => {
     return filenames;
 };
 exports["default"] = getChangedFiles;
+
+
+/***/ }),
+
+/***/ 6413:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const node_fs_1 = __importDefault(__nccwpck_require__(7561));
+const node_path_1 = __importDefault(__nccwpck_require__(9411));
+const ignore_1 = __importDefault(__nccwpck_require__(1230));
+const core_1 = __nccwpck_require__(2186);
+const ignoreFiles = async (changedFiles, inputs) => {
+    const ig = (0, ignore_1.default)();
+    if (inputs.ignoreFile) {
+        const ignoreFile = node_path_1.default.resolve(inputs.rootDir, inputs.ignoreFile);
+        if (node_fs_1.default.existsSync(ignoreFile)) {
+            (0, core_1.info)(`Using ignore file ${inputs.ignoreFile}, filtering files changed.`);
+            const ignoreFileContent = await node_fs_1.default.promises.readFile(ignoreFile, 'utf-8');
+            ig.add(ignoreFileContent);
+        }
+        else {
+            (0, core_1.notice)(`Provided ignore file ${inputs.ignoreFile} doesn't exist. Skipping...`);
+        }
+    }
+    if (inputs.ignorePatterns.length > 0) {
+        (0, core_1.startGroup)('Using ignore pattern, filtering files changed.');
+        inputs.ignorePatterns.forEach((pattern) => (0, core_1.info)(`- ${pattern}`));
+        (0, core_1.endGroup)();
+        ig.add(inputs.ignorePatterns);
+    }
+    const files = changedFiles
+        .filter((filename) => {
+        const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
+        return isFileSupported;
+    })
+        .filter((filename) => !ig.ignores(filename));
+    return files;
+};
+exports["default"] = ignoreFiles;
 
 
 /***/ }),
