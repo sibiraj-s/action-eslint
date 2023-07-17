@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci # or yarn install
-      - uses: sibiraj-s/action-eslint@v2
+      - uses: sibiraj-s/action-eslint@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # optional
           eslint-args: '--ignore-path=.gitignore --quiet'
@@ -42,7 +42,7 @@ Ignore files changed in a PR.
 
 ```yml
 steps:
-  - uses: sibiraj-s/action-eslint@v2
+  - uses: sibiraj-s/action-eslint@v3
     with:
       ignore-file: .eslintignore
       ignore-pattern: |
@@ -58,7 +58,7 @@ You can use this in addition to `ignore-path`/`ignore-patterns` in `eslint-args`
 
 ```yml
 steps:
-  - uses: sibiraj-s/action-eslint@v2
+  - uses: sibiraj-s/action-eslint@v3
     with:
       eslint-args: '--ignore-path=.gitignore --quiet'
       ignore-file: .eslintignore
