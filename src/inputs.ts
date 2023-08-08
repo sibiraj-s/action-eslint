@@ -10,7 +10,7 @@ const inputs: Inputs = {
   extensions: getInput('extensions').split(',').map((ext) => ext.trim()),
   ignorePath: getInput('ignore-path'),
   ignorePatterns: getMultilineInput('ignore-patterns'),
-  allFiles: getInput('all-files'),
+  allFiles: getBooleanInput('all-files'),
 };
 
 export default inputs;
