@@ -240,7 +240,7 @@ const inputs = {
     extensions: (0, core_1.getInput)('extensions').split(',').map((ext) => ext.trim()),
     ignorePath: (0, core_1.getInput)('ignore-path'),
     ignorePatterns: (0, core_1.getMultilineInput)('ignore-patterns'),
-    allFiles: (0, core_1.getInput)('all-files'),
+    allFiles: (0, core_1.getBooleanInput)('all-files'),
 };
 exports["default"] = inputs;
 
