@@ -14,6 +14,12 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v3.0.1 (2023-08-08)
+
+#### Bug Fixes
+
+- Fix all-files to accept boolean input ([76bafe1](https://github.com/sibiraj-s/action-eslint/commit/76bafe1))
+
 ## v3.0.0 (2023-07-17)
 
 #### Breaking Changes
