@@ -39,3 +39,7 @@ inputs:
     description: Run eslint on all files.
     required: false
     default: false
+  eslint-command:
+    description: The eslint command to use - use "eslint" for pnpm
+    required: false
+    default: node_modules/.bin/eslint
