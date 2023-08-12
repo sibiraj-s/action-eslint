@@ -39,7 +39,7 @@ inputs:
     description: Run eslint on all files.
     required: false
     default: false
-  eslint-command:
-    description: The eslint command to use - use "eslint" for pnpm
+  use-npx:
+    description: Enable or disable using npx instead of node node_modules/.bin/eslint
     required: false
-    default: node_modules/.bin/eslint
+    default: false

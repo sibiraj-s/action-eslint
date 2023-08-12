@@ -11,7 +11,7 @@ const inputs: Inputs = {
   ignorePath: getInput('ignore-path'),
   ignorePatterns: getMultilineInput('ignore-patterns'),
   allFiles: getBooleanInput('all-files'),
-  eslintCommand: getInput('eslint-command'),
+  useNpx: getBooleanInput('use-npx'),
 };
 
 export default inputs;
