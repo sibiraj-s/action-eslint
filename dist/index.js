@@ -37,6 +37,7 @@ const annotations_1 = __nccwpck_require__(5598);
 const get_files_1 = __importDefault(__nccwpck_require__(8052));
 const get_eslint_args_1 = __importDefault(__nccwpck_require__(656));
 const runEslint = async () => {
+    var _a;
     if (!inputs_1.default.annotations) {
         (0, annotations_1.disableAnnotations)();
     }
@@ -47,7 +48,7 @@ const runEslint = async () => {
     }
     const eslintArgs = (0, get_eslint_args_1.default)();
     const execOptions = [
-        node_path_1.default.resolve(inputs_1.default.workingDirectory, 'node_modules/.bin/eslint'),
+        node_path_1.default.resolve(inputs_1.default.workingDirectory, (_a = inputs_1.default.eslintCommand) !== null && _a !== void 0 ? _a : 'node_modules/.bin/eslint'),
         ...files,
         ...eslintArgs,
     ].filter(Boolean);
@@ -241,6 +242,7 @@ const inputs = {
     ignorePath: (0, core_1.getInput)('ignore-path'),
     ignorePatterns: (0, core_1.getMultilineInput)('ignore-patterns'),
     allFiles: (0, core_1.getBooleanInput)('all-files'),
+    eslintCommand: (0, core_1.getInput)('eslint-command'),
 };
 exports["default"] = inputs;
 

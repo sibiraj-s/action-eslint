@@ -7,6 +7,7 @@ export interface Inputs {
   ignorePath: string;
   ignorePatterns: string[];
   allFiles: boolean;
+  eslintCommand: string;
 }
 
 export type FileNamesList = string[];
