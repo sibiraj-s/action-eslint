@@ -47,11 +47,11 @@ const runEslint = async () => {
     }
     const eslintArgs = (0, get_eslint_args_1.default)();
     const execOptions = [
-        node_path_1.default.resolve(inputs_1.default.workingDirectory, inputs_1.default.useNpx ? '' : 'node_modules/.bin/eslint'),
+        node_path_1.default.resolve(inputs_1.default.workingDirectory, inputs_1.default.useNpx ? 'eslint' : 'node_modules/.bin/eslint'),
         ...files,
         ...eslintArgs,
     ].filter(Boolean);
-    await (0, exec_1.exec)(inputs_1.default.useNpx ? 'eslint' : 'node', execOptions);
+    await (0, exec_1.exec)(inputs_1.default.useNpx ? 'npx' : 'node', execOptions);
 };
 exports.runEslint = runEslint;
 
