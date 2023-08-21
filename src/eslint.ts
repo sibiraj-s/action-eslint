@@ -23,10 +23,10 @@ export const runEslint = async (): Promise<void> => {
   const eslintArgs = getEslintArgs();
 
   const execOptions = [
-    path.resolve(inputs.workingDirectory, 'node_modules/.bin/eslint'),
+    inputs.useNpx ? 'eslint' : path.resolve(inputs.workingDirectory, 'node_modules/.bin/eslint'),
     ...files,
     ...eslintArgs,
   ].filter(Boolean);
 
-  await exec('node', execOptions);
+  await exec(inputs.useNpx ? 'npx' : 'node', execOptions);
 };

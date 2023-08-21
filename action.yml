@@ -39,3 +39,7 @@ inputs:
     description: Run eslint on all files.
     required: false
     default: false
+  use-npx:
+    description: Enable or disable using npx instead of node node_modules/.bin/eslint
+    required: false
+    default: false
