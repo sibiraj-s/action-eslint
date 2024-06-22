@@ -29,7 +29,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runEslint = void 0;
-const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const core_1 = __nccwpck_require__(2186);
 const exec_1 = __nccwpck_require__(1514);
 const inputs_1 = __importDefault(__nccwpck_require__(6180));
@@ -46,12 +45,13 @@ const runEslint = async () => {
         return;
     }
     const eslintArgs = (0, get_eslint_args_1.default)();
-    const execOptions = [
-        inputs_1.default.useNpx ? 'eslint' : node_path_1.default.resolve(inputs_1.default.workingDirectory, 'node_modules/.bin/eslint'),
+    const execArgs = [
+        inputs_1.default.useNpx ? 'eslint' : 'node_modules/.bin/eslint',
         ...files,
         ...eslintArgs,
     ].filter(Boolean);
-    await (0, exec_1.exec)(inputs_1.default.useNpx ? 'npx' : 'node', execOptions);
+    const execOptions = { cwd: inputs_1.default.workingDirectory };
+    await (0, exec_1.exec)(inputs_1.default.useNpx ? 'npx' : 'node', execArgs, execOptions);
 };
 exports.runEslint = runEslint;
 
@@ -151,6 +151,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const node_path_1 = __importDefault(__nccwpck_require__(9411));
 const core_1 = __nccwpck_require__(2186);
 const inputs_1 = __importDefault(__nccwpck_require__(6180));
 const get_changed_files_1 = __importDefault(__nccwpck_require__(7990));
@@ -165,8 +166,9 @@ const getFiles = async () => {
     const changedFiles = await (0, get_changed_files_1.default)();
     (0, print_1.printItems)('Files changed.', changedFiles);
     const files = await (0, ignore_files_1.default)(changedFiles);
-    (0, print_1.printItems)('Files for linting', files);
-    return files;
+    const relativeFiles = files.map((file) => node_path_1.default.relative(inputs_1.default.workingDirectory, file));
+    (0, print_1.printItems)('Files for linting', relativeFiles);
+    return relativeFiles;
 };
 exports["default"] = getFiles;
 
