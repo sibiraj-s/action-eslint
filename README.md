@@ -73,7 +73,7 @@ The `working-dir` option can be especially useful when the eslint installation i
 
 ```yml
 steps:
-  - uses: action@v2
+  - uses: sibiraj-s/action-eslint@v3
     with:
       working-dir: apps/website
 ```
@@ -88,7 +88,7 @@ such as when a change is made to the `.eslintrc` file, where you may want to lin
 
 ```yml
 steps:
-  - uses: action@v2
+  - uses: sibiraj-s/action-eslint@v3
     with:
       all-files: true
 ```
@@ -97,7 +97,7 @@ Note: When using this input, if the `eslint-args` has the `ignore-path` option t
 
 ```yml
 steps:
-  - uses: action@v2
+  - uses: sibiraj-s/action-eslint@v3
     with:
       all-files: true
       eslint-args: '--ignore-path=.gitignore --quiet'
