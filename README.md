@@ -23,8 +23,8 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
       - run: npm ci # or yarn install
@@ -108,8 +108,8 @@ Example to Run lint on all files when `.eslintrc` changes
 
 ```yml
 steps:
-  - uses: actions/checkout@v3
-  - uses: dorny/paths-filter@v2
+  - uses: actions/checkout@v4
+  - uses: dorny/paths-filter@v3
     id: filter
     with:
       filters: |
