@@ -119,7 +119,7 @@ steps:
   # run eslint on all files if eslintrc changes
   - name: Run eslint on changed files
     if: steps.filter.outputs.eslintrc == 'false'
-    uses: sibiraj-s/action-eslint@v2
+    uses: sibiraj-s/action-eslint@v3
     with:
       all-files: ${{ steps.filter.outputs.eslintrc == 'true' }}
 ```
