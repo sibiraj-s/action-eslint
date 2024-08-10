@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
       - run: npm ci # or yarn install
       - uses: sibiraj-s/action-eslint@v3
         with:
