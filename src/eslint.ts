@@ -1,5 +1,3 @@
-import path from 'node:path';
-
 import { notice } from '@actions/core';
 import { exec } from '@actions/exec';
 
@@ -22,11 +20,12 @@ export const runEslint = async (): Promise<void> => {
 
   const eslintArgs = getEslintArgs();
 
-  const execOptions = [
-    inputs.useNpx ? 'eslint' : path.resolve(inputs.workingDirectory, 'node_modules/.bin/eslint'),
+  const execArgs = [
+    inputs.useNpx ? 'eslint' : 'node_modules/.bin/eslint',
     ...files,
     ...eslintArgs,
   ].filter(Boolean);
+  const execOptions = { cwd: inputs.workingDirectory };
 
-  await exec(inputs.useNpx ? 'npx' : 'node', execOptions);
+  await exec(inputs.useNpx ? 'npx' : 'node', execArgs, execOptions);
 };
