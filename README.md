@@ -45,7 +45,7 @@ steps:
   - uses: sibiraj-s/action-eslint@v3
     with:
       ignore-path: .eslintignore
-      ignore-pattern: |
+      ignore-patterns: |
         dist/
         lib/
 ```
@@ -62,7 +62,7 @@ steps:
     with:
       eslint-args: '--ignore-path=.gitignore --quiet'
       ignore-path: .eslintignore
-      ignore-pattern: |
+      ignore-patterns: |
         dist/
         lib/
 ```
