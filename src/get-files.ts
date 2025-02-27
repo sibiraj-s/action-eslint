@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { info } from '@actions/core';
 
 import { FileNamesList } from './types';
@@ -18,9 +20,10 @@ const getFiles = async (): Promise<FileNamesList> => {
   printItems('Files changed.', changedFiles);
 
   const files = await ignoreFiles(changedFiles);
-  printItems('Files for linting', files);
+  const relativeFiles = files.map((file) => path.relative(inputs.workingDirectory, file));
+  printItems('Files for linting', relativeFiles);
 
-  return files;
+  return relativeFiles;
 };
 
 export default getFiles;
