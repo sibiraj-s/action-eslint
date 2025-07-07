@@ -9,9 +9,10 @@
   "bugs": "https://github.com/sibiraj-s/action-eslint/issues",
   "homepage": "https://github.com/sibiraj-s/action-eslint#readme",
   "main": "lib/main.js",
+  "type": "module",
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "keywords": [
     "eslint",
@@ -22,27 +23,26 @@
   ],
   "scripts": {
     "lint": "eslint . --ext js,ts --ignore-path .gitignore",
-    "build": "tsc",
-    "package": "ncc build --source-map --license licenses.txt",
+    "build": "tsdown",
     "prepare": "is-ci || husky install"
   },
   "dependencies": {
-    "@actions/core": "^1.10.0",
+    "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
-    "@actions/github": "^5.1.1"
+    "@actions/github": "^6.0.1",
+    "ignore": "^7.0.5"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.7",
-    "@octokit/types": "^11.1.0",
-    "@types/node": "^18.17.3",
-    "@vercel/ncc": "^0.36.1",
+    "@commitlint/cli": "^19.8.1",
+    "@octokit/types": "^14.1.0",
+    "@types/node": "^22.16.0",
     "commitlint-config-non-conventional": "^1.0.1",
-    "eslint": "^8.46.0",
-    "eslint-config-pegasus": "^5.0.0",
-    "husky": "^8.0.3",
-    "ignore": "^5.2.4",
-    "is-ci": "^3.0.1",
-    "lint-staged": "^13.2.3",
-    "typescript": "^5.1.6"
+    "eslint": "^9.30.1",
+    "eslint-config-pegasus": "^6.0.2",
+    "husky": "^9.1.7",
+    "is-ci": "^4.1.0",
+    "lint-staged": "^16.1.2",
+    "tsdown": "^0.12.9",
+    "typescript": "^5.8.3"
   }
 }

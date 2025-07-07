@@ -7,8 +7,8 @@ branding:
   color: 'green'
 
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'node20'
+  main: 'dist/main.js'
 
 inputs:
   token:

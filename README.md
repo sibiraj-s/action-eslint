@@ -23,10 +23,10 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - run: npm ci # or yarn install
       - uses: sibiraj-s/action-eslint@v3
         with:
@@ -45,7 +45,7 @@ steps:
   - uses: sibiraj-s/action-eslint@v3
     with:
       ignore-path: .eslintignore
-      ignore-pattern: |
+      ignore-patterns: |
         dist/
         lib/
 ```
@@ -62,20 +62,20 @@ steps:
     with:
       eslint-args: '--ignore-path=.gitignore --quiet'
       ignore-path: .eslintignore
-      ignore-pattern: |
+      ignore-patterns: |
         dist/
         lib/
 ```
 
 ### Working directory
 
-The `working-dir` option can be especially useful when the eslint installation is not located in the root directory.
+The `working-directory` option can be especially useful when the eslint installation is not located in the root directory.
 
 ```yml
 steps:
-  - uses: action@v2
+  - uses: sibiraj-s/action-eslint@v3
     with:
-      working-dir: apps/website
+      working-directory: apps/website
 ```
 
 Note: When using this option, options such as `ignore-path` will be resolved based on the specified directory and files
@@ -88,7 +88,7 @@ such as when a change is made to the `.eslintrc` file, where you may want to lin
 
 ```yml
 steps:
-  - uses: action@v2
+  - uses: sibiraj-s/action-eslint@v3
     with:
       all-files: true
 ```
@@ -97,7 +97,7 @@ Note: When using this input, if the `eslint-args` has the `ignore-path` option t
 
 ```yml
 steps:
-  - uses: action@v2
+  - uses: sibiraj-s/action-eslint@v3
     with:
       all-files: true
       eslint-args: '--ignore-path=.gitignore --quiet'
@@ -108,8 +108,8 @@ Example to Run lint on all files when `.eslintrc` changes
 
 ```yml
 steps:
-  - uses: actions/checkout@v3
-  - uses: dorny/paths-filter@v2
+  - uses: actions/checkout@v4
+  - uses: dorny/paths-filter@v3
     id: filter
     with:
       filters: |
@@ -119,7 +119,7 @@ steps:
   # run eslint on all files if eslintrc changes
   - name: Run eslint on changed files
     if: steps.filter.outputs.eslintrc == 'false'
-    uses: sibiraj-s/action-eslint@v2
+    uses: sibiraj-s/action-eslint@v3
     with:
       all-files: ${{ steps.filter.outputs.eslintrc == 'true' }}
 ```
