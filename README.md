@@ -69,13 +69,13 @@ steps:
 
 ### Working directory
 
-The `working-dir` option can be especially useful when the eslint installation is not located in the root directory.
+The `working-directory` option can be especially useful when the eslint installation is not located in the root directory.
 
 ```yml
 steps:
   - uses: sibiraj-s/action-eslint@v3
     with:
-      working-dir: apps/website
+      working-directory: apps/website
 ```
 
 Note: When using this option, options such as `ignore-path` will be resolved based on the specified directory and files
