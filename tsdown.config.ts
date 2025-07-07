@@ -5,5 +5,5 @@ export default defineConfig({
   outDir: 'dist',
   clean: true,
   sourcemap: true,
-  noExternal: ['@actions/core', '@actions/exec', '@actions/github'],
+  noExternal: ['@actions/core', '@actions/exec', '@actions/github', 'ignore'],
 })

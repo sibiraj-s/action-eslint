@@ -2,7 +2,6 @@ import { createRequire } from "node:module";
 import { info } from "console";
 import path from "node:path";
 import fs from "node:fs";
-import ignore from "ignore";
 
 //#region rolldown:runtime
 var __create$1 = Object.create;
@@ -7565,10 +7564,10 @@ var require_pool = __commonJS({ "node_modules/undici/lib/pool.js"(exports, modul
 		return new Client$3(origin, opts);
 	}
 	var Pool$5 = class extends PoolBase$1 {
-		constructor(origin, { connections, factory = defaultFactory$3, connect: connect$2, connectTimeout, tls: tls$2, maxCachedSessions, socketPath, autoSelectFamily, autoSelectFamilyAttemptTimeout, allowH2,...options } = {}) {
+		constructor(origin, { connections, factory: factory$1 = defaultFactory$3, connect: connect$2, connectTimeout, tls: tls$2, maxCachedSessions, socketPath, autoSelectFamily, autoSelectFamilyAttemptTimeout, allowH2,...options } = {}) {
 			super();
 			if (connections != null && (!Number.isFinite(connections) || connections < 0)) throw new InvalidArgumentError$15("invalid connections");
-			if (typeof factory !== "function") throw new InvalidArgumentError$15("factory must be a function.");
+			if (typeof factory$1 !== "function") throw new InvalidArgumentError$15("factory must be a function.");
 			if (connect$2 != null && typeof connect$2 !== "function" && typeof connect$2 !== "object") throw new InvalidArgumentError$15("connect must be a function or an object");
 			if (typeof connect$2 !== "function") connect$2 = buildConnector$2({
 				...tls$2,
@@ -7591,7 +7590,7 @@ var require_pool = __commonJS({ "node_modules/undici/lib/pool.js"(exports, modul
 				allowH2
 			};
 			this[kOptions$3].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
-			this[kFactory$3] = factory;
+			this[kFactory$3] = factory$1;
 			this.on("connectionError", (origin$1, targets, error$1) => {
 				for (const target of targets) {
 					const idx = this[kClients$3].indexOf(target);
@@ -7636,7 +7635,7 @@ var require_balanced_pool = __commonJS({ "node_modules/undici/lib/balanced-pool.
 		return new Pool$4(origin, opts);
 	}
 	var BalancedPool$1 = class extends PoolBase {
-		constructor(upstreams = [], { factory = defaultFactory$2,...opts } = {}) {
+		constructor(upstreams = [], { factory: factory$1 = defaultFactory$2,...opts } = {}) {
 			super();
 			this[kOptions$2] = opts;
 			this[kIndex] = -1;
@@ -7644,9 +7643,9 @@ var require_balanced_pool = __commonJS({ "node_modules/undici/lib/balanced-pool.
 			this[kMaxWeightPerServer] = this[kOptions$2].maxWeightPerServer || 100;
 			this[kErrorPenalty] = this[kOptions$2].errorPenalty || 15;
 			if (!Array.isArray(upstreams)) upstreams = [upstreams];
-			if (typeof factory !== "function") throw new InvalidArgumentError$14("factory must be a function.");
+			if (typeof factory$1 !== "function") throw new InvalidArgumentError$14("factory must be a function.");
 			this[kInterceptors$2] = opts.interceptors && opts.interceptors.BalancedPool && Array.isArray(opts.interceptors.BalancedPool) ? opts.interceptors.BalancedPool : [];
-			this[kFactory$2] = factory;
+			this[kFactory$2] = factory$1;
 			for (const upstream of upstreams) this.addUpstream(upstream);
 			this._updateBalancedPoolStats();
 		}
@@ -7769,9 +7768,9 @@ var require_agent = __commonJS({ "node_modules/undici/lib/agent.js"(exports, mod
 		return opts && opts.connections === 1 ? new Client$2(origin, opts) : new Pool$3(origin, opts);
 	}
 	var Agent$4 = class extends DispatcherBase$1 {
-		constructor({ factory = defaultFactory$1, maxRedirections = 0, connect: connect$2,...options } = {}) {
+		constructor({ factory: factory$1 = defaultFactory$1, maxRedirections = 0, connect: connect$2,...options } = {}) {
 			super();
-			if (typeof factory !== "function") throw new InvalidArgumentError$13("factory must be a function.");
+			if (typeof factory$1 !== "function") throw new InvalidArgumentError$13("factory must be a function.");
 			if (connect$2 != null && typeof connect$2 !== "function" && typeof connect$2 !== "object") throw new InvalidArgumentError$13("connect must be a function or an object");
 			if (!Number.isInteger(maxRedirections) || maxRedirections < 0) throw new InvalidArgumentError$13("maxRedirections must be a positive number");
 			if (connect$2 && typeof connect$2 !== "function") connect$2 = { ...connect$2 };
@@ -7782,7 +7781,7 @@ var require_agent = __commonJS({ "node_modules/undici/lib/agent.js"(exports, mod
 			};
 			this[kOptions$1].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
 			this[kMaxRedirections] = maxRedirections;
-			this[kFactory$1] = factory;
+			this[kFactory$1] = factory$1;
 			this[kClients$1] = /* @__PURE__ */ new Map();
 			this[kFinalizer] = new FinalizationRegistry$1(
 				/* istanbul ignore next: gc is undeterministic */
@@ -8258,12 +8257,12 @@ var require_api_stream = __commonJS({ "node_modules/undici/lib/api/api-stream.js
 	const { AsyncResource: AsyncResource$3 } = __require("async_hooks");
 	const { addSignal: addSignal$3, removeSignal: removeSignal$3 } = require_abort_signal();
 	var StreamHandler = class extends AsyncResource$3 {
-		constructor(opts, factory, callback) {
+		constructor(opts, factory$1, callback) {
 			if (!opts || typeof opts !== "object") throw new InvalidArgumentError$10("invalid opts");
 			const { signal, method, opaque, body, onInfo, responseHeaders, throwOnError } = opts;
 			try {
 				if (typeof callback !== "function") throw new InvalidArgumentError$10("invalid callback");
-				if (typeof factory !== "function") throw new InvalidArgumentError$10("invalid factory");
+				if (typeof factory$1 !== "function") throw new InvalidArgumentError$10("invalid factory");
 				if (signal && typeof signal.on !== "function" && typeof signal.addEventListener !== "function") throw new InvalidArgumentError$10("signal must be an EventEmitter or EventTarget");
 				if (method === "CONNECT") throw new InvalidArgumentError$10("invalid method");
 				if (onInfo && typeof onInfo !== "function") throw new InvalidArgumentError$10("invalid onInfo callback");
@@ -8274,7 +8273,7 @@ var require_api_stream = __commonJS({ "node_modules/undici/lib/api/api-stream.js
 			}
 			this.responseHeaders = responseHeaders || null;
 			this.opaque = opaque || null;
-			this.factory = factory;
+			this.factory = factory$1;
 			this.callback = callback;
 			this.res = null;
 			this.abort = null;
@@ -8294,7 +8293,7 @@ var require_api_stream = __commonJS({ "node_modules/undici/lib/api/api-stream.js
 			this.context = context$1;
 		}
 		onHeaders(statusCode, rawHeaders, resume$1, statusMessage) {
-			const { factory, opaque, context: context$1, callback, responseHeaders } = this;
+			const { factory: factory$1, opaque, context: context$1, callback, responseHeaders } = this;
 			const headers = responseHeaders === "raw" ? util$7.parseRawHeaders(rawHeaders) : util$7.parseHeaders(rawHeaders);
 			if (statusCode < 200) {
 				if (this.onInfo) this.onInfo({
@@ -8319,8 +8318,8 @@ var require_api_stream = __commonJS({ "node_modules/undici/lib/api/api-stream.js
 					headers
 				});
 			} else {
-				if (factory === null) return;
-				res = this.runInAsyncScope(factory, null, {
+				if (factory$1 === null) return;
+				res = this.runInAsyncScope(factory$1, null, {
 					statusCode,
 					headers,
 					opaque,
@@ -8374,14 +8373,14 @@ var require_api_stream = __commonJS({ "node_modules/undici/lib/api/api-stream.js
 			}
 		}
 	};
-	function stream(opts, factory, callback) {
+	function stream(opts, factory$1, callback) {
 		if (callback === void 0) return new Promise((resolve, reject) => {
-			stream.call(this, opts, factory, (err, data) => {
+			stream.call(this, opts, factory$1, (err, data) => {
 				return err ? reject(err) : resolve(data);
 			});
 		});
 		try {
-			this.dispatch(opts, new StreamHandler(opts, factory, callback));
+			this.dispatch(opts, new StreamHandler(opts, factory$1, callback));
 		} catch (err) {
 			if (typeof callback !== "function") throw err;
 			const opaque = opts && opts.opaque;
@@ -20063,6 +20062,249 @@ const printItems = (name, items) => {
 };
 
 //#endregion
+//#region node_modules/ignore/index.js
+var require_ignore = __commonJS({ "node_modules/ignore/index.js"(exports, module) {
+	function makeArray(subject) {
+		return Array.isArray(subject) ? subject : [subject];
+	}
+	const UNDEFINED = void 0;
+	const EMPTY = "";
+	const SPACE = " ";
+	const ESCAPE = "\\";
+	const REGEX_TEST_BLANK_LINE = /^\s+$/;
+	const REGEX_INVALID_TRAILING_BACKSLASH = /(?:[^\\]|^)\\$/;
+	const REGEX_REPLACE_LEADING_EXCAPED_EXCLAMATION = /^\\!/;
+	const REGEX_REPLACE_LEADING_EXCAPED_HASH = /^\\#/;
+	const REGEX_SPLITALL_CRLF = /\r?\n/g;
+	const REGEX_TEST_INVALID_PATH = /^\.{0,2}\/|^\.{1,2}$/;
+	const REGEX_TEST_TRAILING_SLASH = /\/$/;
+	const SLASH = "/";
+	let TMP_KEY_IGNORE = "node-ignore";
+	/* istanbul ignore else */
+	if (typeof Symbol !== "undefined") TMP_KEY_IGNORE = Symbol.for("node-ignore");
+	const KEY_IGNORE = TMP_KEY_IGNORE;
+	const define = (object, key, value) => {
+		Object.defineProperty(object, key, { value });
+		return value;
+	};
+	const REGEX_REGEXP_RANGE = /([0-z])-([0-z])/g;
+	const RETURN_FALSE = () => false;
+	const sanitizeRange = (range) => range.replace(REGEX_REGEXP_RANGE, (match, from, to) => from.charCodeAt(0) <= to.charCodeAt(0) ? match : EMPTY);
+	const cleanRangeBackSlash = (slashes) => {
+		const { length } = slashes;
+		return slashes.slice(0, length - length % 2);
+	};
+	const REPLACERS = [
+		[/^\uFEFF/, () => EMPTY],
+		[/((?:\\\\)*?)(\\?\s+)$/, (_, m1, m2) => m1 + (m2.indexOf("\\") === 0 ? SPACE : EMPTY)],
+		[/(\\+?)\s/g, (_, m1) => {
+			const { length } = m1;
+			return m1.slice(0, length - length % 2) + SPACE;
+		}],
+		[/[\\$.|*+(){^]/g, (match) => `\\${match}`],
+		[/(?!\\)\?/g, () => "[^/]"],
+		[/^\//, () => "^"],
+		[/\//g, () => "\\/"],
+		[/^\^*\\\*\\\*\\\//, () => "^(?:.*\\/)?"],
+		[/^(?=[^^])/, function startingReplacer() {
+			return !/\/(?!$)/.test(this) ? "(?:^|\\/)" : "^";
+		}],
+		[/\\\/\\\*\\\*(?=\\\/|$)/g, (_, index, str) => index + 6 < str.length ? "(?:\\/[^\\/]+)*" : "\\/.+"],
+		[/(^|[^\\]+)(\\\*)+(?=.+)/g, (_, p1, p2) => {
+			const unescaped = p2.replace(/\\\*/g, "[^\\/]*");
+			return p1 + unescaped;
+		}],
+		[/\\\\\\(?=[$.|*+(){^])/g, () => ESCAPE],
+		[/\\\\/g, () => ESCAPE],
+		[/(\\)?\[([^\]/]*?)(\\*)($|\])/g, (match, leadEscape, range, endEscape, close) => leadEscape === ESCAPE ? `\\[${range}${cleanRangeBackSlash(endEscape)}${close}` : close === "]" ? endEscape.length % 2 === 0 ? `[${sanitizeRange(range)}${endEscape}]` : "[]" : "[]"],
+		[/(?:[^*])$/, (match) => /\/$/.test(match) ? `${match}$` : `${match}(?=$|\\/$)`]
+	];
+	const REGEX_REPLACE_TRAILING_WILDCARD = /(^|\\\/)?\\\*$/;
+	const MODE_IGNORE = "regex";
+	const MODE_CHECK_IGNORE = "checkRegex";
+	const UNDERSCORE = "_";
+	const TRAILING_WILD_CARD_REPLACERS = {
+		[MODE_IGNORE](_, p1) {
+			const prefix = p1 ? `${p1}[^/]+` : "[^/]*";
+			return `${prefix}(?=$|\\/$)`;
+		},
+		[MODE_CHECK_IGNORE](_, p1) {
+			const prefix = p1 ? `${p1}[^/]*` : "[^/]*";
+			return `${prefix}(?=$|\\/$)`;
+		}
+	};
+	const makeRegexPrefix = (pattern) => REPLACERS.reduce((prev, [matcher, replacer]) => prev.replace(matcher, replacer.bind(pattern)), pattern);
+	const isString = (subject) => typeof subject === "string";
+	const checkPattern = (pattern) => pattern && isString(pattern) && !REGEX_TEST_BLANK_LINE.test(pattern) && !REGEX_INVALID_TRAILING_BACKSLASH.test(pattern) && pattern.indexOf("#") !== 0;
+	const splitPattern = (pattern) => pattern.split(REGEX_SPLITALL_CRLF).filter(Boolean);
+	var IgnoreRule = class {
+		constructor(pattern, mark, body, ignoreCase, negative, prefix) {
+			this.pattern = pattern;
+			this.mark = mark;
+			this.negative = negative;
+			define(this, "body", body);
+			define(this, "ignoreCase", ignoreCase);
+			define(this, "regexPrefix", prefix);
+		}
+		get regex() {
+			const key = UNDERSCORE + MODE_IGNORE;
+			if (this[key]) return this[key];
+			return this._make(MODE_IGNORE, key);
+		}
+		get checkRegex() {
+			const key = UNDERSCORE + MODE_CHECK_IGNORE;
+			if (this[key]) return this[key];
+			return this._make(MODE_CHECK_IGNORE, key);
+		}
+		_make(mode, key) {
+			const str = this.regexPrefix.replace(REGEX_REPLACE_TRAILING_WILDCARD, TRAILING_WILD_CARD_REPLACERS[mode]);
+			const regex = this.ignoreCase ? new RegExp(str, "i") : new RegExp(str);
+			return define(this, key, regex);
+		}
+	};
+	const createRule = ({ pattern, mark }, ignoreCase) => {
+		let negative = false;
+		let body = pattern;
+		if (body.indexOf("!") === 0) {
+			negative = true;
+			body = body.substr(1);
+		}
+		body = body.replace(REGEX_REPLACE_LEADING_EXCAPED_EXCLAMATION, "!").replace(REGEX_REPLACE_LEADING_EXCAPED_HASH, "#");
+		const regexPrefix = makeRegexPrefix(body);
+		return new IgnoreRule(pattern, mark, body, ignoreCase, negative, regexPrefix);
+	};
+	var RuleManager = class {
+		constructor(ignoreCase) {
+			this._ignoreCase = ignoreCase;
+			this._rules = [];
+		}
+		_add(pattern) {
+			if (pattern && pattern[KEY_IGNORE]) {
+				this._rules = this._rules.concat(pattern._rules._rules);
+				this._added = true;
+				return;
+			}
+			if (isString(pattern)) pattern = { pattern };
+			if (checkPattern(pattern.pattern)) {
+				const rule = createRule(pattern, this._ignoreCase);
+				this._added = true;
+				this._rules.push(rule);
+			}
+		}
+		add(pattern) {
+			this._added = false;
+			makeArray(isString(pattern) ? splitPattern(pattern) : pattern).forEach(this._add, this);
+			return this._added;
+		}
+		test(path$6, checkUnignored, mode) {
+			let ignored = false;
+			let unignored = false;
+			let matchedRule;
+			this._rules.forEach((rule) => {
+				const { negative } = rule;
+				if (unignored === negative && ignored !== unignored || negative && !ignored && !unignored && !checkUnignored) return;
+				const matched = rule[mode].test(path$6);
+				if (!matched) return;
+				ignored = !negative;
+				unignored = negative;
+				matchedRule = negative ? UNDEFINED : rule;
+			});
+			const ret = {
+				ignored,
+				unignored
+			};
+			if (matchedRule) ret.rule = matchedRule;
+			return ret;
+		}
+	};
+	const throwError = (message, Ctor) => {
+		throw new Ctor(message);
+	};
+	const checkPath = (path$6, originalPath, doThrow) => {
+		if (!isString(path$6)) return doThrow(`path must be a string, but got \`${originalPath}\``, TypeError);
+		if (!path$6) return doThrow(`path must not be empty`, TypeError);
+		if (checkPath.isNotRelative(path$6)) {
+			const r = "`path.relative()`d";
+			return doThrow(`path should be a ${r} string, but got "${originalPath}"`, RangeError);
+		}
+		return true;
+	};
+	const isNotRelative = (path$6) => REGEX_TEST_INVALID_PATH.test(path$6);
+	checkPath.isNotRelative = isNotRelative;
+	/* istanbul ignore next */
+	checkPath.convert = (p) => p;
+	var Ignore = class {
+		constructor({ ignorecase = true, ignoreCase = ignorecase, allowRelativePaths = false } = {}) {
+			define(this, KEY_IGNORE, true);
+			this._rules = new RuleManager(ignoreCase);
+			this._strictPathCheck = !allowRelativePaths;
+			this._initCache();
+		}
+		_initCache() {
+			this._ignoreCache = Object.create(null);
+			this._testCache = Object.create(null);
+		}
+		add(pattern) {
+			if (this._rules.add(pattern)) this._initCache();
+			return this;
+		}
+		addPattern(pattern) {
+			return this.add(pattern);
+		}
+		_test(originalPath, cache, checkUnignored, slices) {
+			const path$6 = originalPath && checkPath.convert(originalPath);
+			checkPath(path$6, originalPath, this._strictPathCheck ? throwError : RETURN_FALSE);
+			return this._t(path$6, cache, checkUnignored, slices);
+		}
+		checkIgnore(path$6) {
+			if (!REGEX_TEST_TRAILING_SLASH.test(path$6)) return this.test(path$6);
+			const slices = path$6.split(SLASH).filter(Boolean);
+			slices.pop();
+			if (slices.length) {
+				const parent = this._t(slices.join(SLASH) + SLASH, this._testCache, true, slices);
+				if (parent.ignored) return parent;
+			}
+			return this._rules.test(path$6, false, MODE_CHECK_IGNORE);
+		}
+		_t(path$6, cache, checkUnignored, slices) {
+			if (path$6 in cache) return cache[path$6];
+			if (!slices) slices = path$6.split(SLASH).filter(Boolean);
+			slices.pop();
+			if (!slices.length) return cache[path$6] = this._rules.test(path$6, checkUnignored, MODE_IGNORE);
+			const parent = this._t(slices.join(SLASH) + SLASH, cache, checkUnignored, slices);
+			return cache[path$6] = parent.ignored ? parent : this._rules.test(path$6, checkUnignored, MODE_IGNORE);
+		}
+		ignores(path$6) {
+			return this._test(path$6, this._ignoreCache, false).ignored;
+		}
+		createFilter() {
+			return (path$6) => !this.ignores(path$6);
+		}
+		filter(paths) {
+			return makeArray(paths).filter(this.createFilter());
+		}
+		test(path$6) {
+			return this._test(path$6, this._testCache, true);
+		}
+	};
+	const factory = (options) => new Ignore(options);
+	const isPathValid = (path$6) => checkPath(path$6 && checkPath.convert(path$6), path$6, RETURN_FALSE);
+	/* istanbul ignore next */
+	const setupWindows = () => {
+		const makePosix = (str) => /^\\\\\?\\/.test(str) || /["<>|\u0000-\u001F]+/u.test(str) ? str : str.replace(/\\/g, "/");
+		checkPath.convert = makePosix;
+		const REGEX_TEST_WINDOWS_PATH_ABSOLUTE = /^[a-z]:\//i;
+		checkPath.isNotRelative = (path$6) => REGEX_TEST_WINDOWS_PATH_ABSOLUTE.test(path$6) || isNotRelative(path$6);
+	};
+	/* istanbul ignore next */
+	if (typeof process !== "undefined" && process.platform === "win32") setupWindows();
+	module.exports = factory;
+	factory.default = factory;
+	module.exports.isPathValid = isPathValid;
+	define(module.exports, Symbol.for("setupWindows"), setupWindows);
+} });
+
+//#endregion
 //#region src/path.ts
 const resovlePath = (pathStr) => {
 	return path.resolve(inputs_default.workingDirectory, pathStr);
@@ -20070,13 +20312,14 @@ const resovlePath = (pathStr) => {
 
 //#endregion
 //#region src/ignore-files.ts
+var import_ignore = __toESM$1(require_ignore(), 1);
 var import_core$3 = __toESM$1(require_core(), 1);
 const filterWorkingDirectoryFiles = (files) => {
 	if (!inputs_default.workingDirectory) return files;
 	return files.filter((file) => file.startsWith(inputs_default.workingDirectory));
 };
 const ignoreFiles = async (changedFiles) => {
-	const ig = ignore();
+	const ig = (0, import_ignore.default)();
 	const files = filterWorkingDirectoryFiles(changedFiles);
 	if (inputs_default.ignorePath) {
 		const ignoreFile = resovlePath(inputs_default.ignorePath);
