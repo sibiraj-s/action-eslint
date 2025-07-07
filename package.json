@@ -34,15 +34,15 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",
     "@octokit/types": "^11.1.0",
-    "@types/node": "^18.17.3",
-    "@vercel/ncc": "^0.36.1",
+    "@types/node": "^22.16.0",
+    "@vercel/ncc": "^0.38.3",
     "commitlint-config-non-conventional": "^1.0.1",
     "eslint": "^8.46.0",
     "eslint-config-pegasus": "^5.0.0",
-    "husky": "^8.0.3",
+    "husky": "^9.1.7",
     "ignore": "^5.2.4",
-    "is-ci": "^3.0.1",
-    "lint-staged": "^13.2.3",
-    "typescript": "^5.1.6"
+    "is-ci": "^4.1.0",
+    "lint-staged": "^16.1.2",
+    "typescript": "^5.8.3"
   }
 }

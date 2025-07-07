@@ -1,7 +1,4 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-npx --no lint-staged
+lint-staged
 npm run build
 npm run package
 git add dist/
