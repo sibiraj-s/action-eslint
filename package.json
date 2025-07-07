@@ -28,9 +28,9 @@
     "prepare": "is-ci || husky install"
   },
   "dependencies": {
-    "@actions/core": "^1.10.0",
+    "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
-    "@actions/github": "^6.0.0"
+    "@actions/github": "^6.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",
