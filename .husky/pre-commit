@@ -1,4 +1,3 @@
 lint-staged
 npm run build
-npm run package
 git add dist/

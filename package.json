@@ -23,8 +23,7 @@
   ],
   "scripts": {
     "lint": "eslint . --ext js,ts --ignore-path .gitignore",
-    "build": "tsc",
-    "package": "ncc build --source-map --license licenses.txt",
+    "build": "tsdown",
     "prepare": "is-ci || husky install"
   },
   "dependencies": {
@@ -37,13 +36,13 @@
     "@commitlint/cli": "^19.8.1",
     "@octokit/types": "^14.1.0",
     "@types/node": "^22.16.0",
-    "@vercel/ncc": "^0.38.3",
     "commitlint-config-non-conventional": "^1.0.1",
     "eslint": "^9.30.1",
     "eslint-config-pegasus": "^6.0.2",
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
     "lint-staged": "^16.1.2",
+    "tsdown": "^0.12.9",
     "typescript": "^5.8.3"
   }
 }
