@@ -17084,7 +17084,7 @@ const inputs = {
 	ignorePath: (0, import_core$6.getInput)("ignore-path"),
 	ignorePatterns: (0, import_core$6.getMultilineInput)("ignore-patterns"),
 	allFiles: (0, import_core$6.getBooleanInput)("all-files"),
-	useNpx: (0, import_core$6.getBooleanInput)("use-npx")
+	packageManager: (0, import_core$6.getInput)("package-manager")
 };
 var inputs_default = inputs;
 
@@ -20387,6 +20387,20 @@ var get_eslint_args_default = getEslintArgs;
 //#region src/eslint.ts
 var import_core$1 = __toESM$1(require_core(), 1);
 var import_exec = __toESM$1(require_exec(), 1);
+const getExecutionCommand = () => {
+	const packageManager = inputs_default.packageManager.toLowerCase();
+	switch (packageManager) {
+		case "pnpm": return {
+			command: "pnpm",
+			args: ["dlx", "eslint"]
+		};
+		case "npm": return {
+			command: "npx",
+			args: ["eslint"]
+		};
+		default: throw new Error(`Unsupported package manager: ${packageManager}. Supported: npm, pnpm`);
+	}
+};
 const runEslint = async () => {
 	if (!inputs_default.annotations) disableAnnotations();
 	const files = await get_files_default();
@@ -20395,13 +20409,14 @@ const runEslint = async () => {
 		return;
 	}
 	const eslintArgs = get_eslint_args_default();
+	const { command, args } = getExecutionCommand();
 	const execArgs = [
-		inputs_default.useNpx ? "eslint" : "node_modules/.bin/eslint",
+		...args,
 		...files,
 		...eslintArgs
 	].filter(Boolean);
 	const execOptions = { cwd: inputs_default.workingDirectory };
-	await (0, import_exec.exec)(inputs_default.useNpx ? "npx" : "node", execArgs, execOptions);
+	await (0, import_exec.exec)(command, execArgs, execOptions);
 };
 
 //#endregion

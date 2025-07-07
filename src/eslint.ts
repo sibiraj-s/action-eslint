@@ -6,6 +6,19 @@ import { disableAnnotations } from './annotations';
 import getFiles from './get-files';
 import getEslintArgs from './get-eslint-args';
 
+const getExecutionCommand = (): { command: string; args: string[] } => {
+  const packageManager = inputs.packageManager.toLowerCase();
+
+  switch (packageManager) {
+    case 'pnpm':
+      return { command: 'pnpm', args: ['dlx', 'eslint'] };
+    case 'npm':
+      return { command: 'npx', args: ['eslint'] };
+    default:
+      throw new Error(`Unsupported package manager: ${packageManager}. Supported: npm, pnpm`);
+  }
+};
+
 export const runEslint = async (): Promise<void> => {
   if (!inputs.annotations) {
     disableAnnotations();
@@ -19,13 +32,14 @@ export const runEslint = async (): Promise<void> => {
   }
 
   const eslintArgs = getEslintArgs();
+  const { command, args } = getExecutionCommand();
 
   const execArgs = [
-    inputs.useNpx ? 'eslint' : 'node_modules/.bin/eslint',
+    ...args,
     ...files,
     ...eslintArgs,
   ].filter(Boolean);
   const execOptions = { cwd: inputs.workingDirectory };
 
-  await exec(inputs.useNpx ? 'npx' : 'node', execArgs, execOptions);
+  await exec(command, execArgs, execOptions);
 };

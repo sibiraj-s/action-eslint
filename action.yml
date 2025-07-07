@@ -25,9 +25,9 @@ inputs:
   annotations:
     description: Enable or disable annotations
     required: false
-    default: true
+    default: 'true'
   working-directory:
-    description: Path to project containing npm/yarn installation
+    description: Path to project containing package manager installation
     required: false
   ignore-path:
     description: Path to ignore file.
@@ -38,8 +38,8 @@ inputs:
   all-files:
     description: Run eslint on all files.
     required: false
-    default: false
-  use-npx:
-    description: Enable or disable using npx instead of node node_modules/.bin/eslint
+    default: 'false'
+  package-manager:
+    description: Package manager to use (npm, pnpm). Defaults to npm if not specified
     required: false
-    default: false
+    default: npm

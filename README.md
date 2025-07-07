@@ -124,6 +124,22 @@ steps:
       all-files: ${{ steps.filter.outputs.eslintrc == 'true' }}
 ```
 
+### Package Manager Support
+
+The action supports different package managers. You can specify which package manager to use with the `package-manager` input:
+
+```yml
+steps:
+  - uses: sibiraj-s/action-eslint@v3
+    with:
+      package-manager: 'npm' # or 'pnpm'
+```
+
+Supported package managers:
+
+- `npm` - Uses `npx eslint`
+- `pnpm` - Uses `pnpm exec eslint`
+
 ## Security
 
 For better security it is recommended to pin actions to a full length commit SHA.
@@ -132,7 +148,7 @@ Read more on [using third-party actions](https://docs.github.com/en/actions/lear
 
 ## Known Issues
 
-- Yarn 2+ is not supported
+- When using `package-manager: 'yarn'`, ensure you're using Yarn 1.x or Yarn 3+ with the modern `yarn exec` command. Yarn 2 (Berry) without proper exec setup may not work as expected.
 
 ## Debugging
 

@@ -7,7 +7,7 @@ export interface Inputs {
   ignorePath: string;
   ignorePatterns: string[];
   allFiles: boolean;
-  useNpx: boolean;
+  packageManager: string;
 }
 
 export type FileNamesList = string[];
