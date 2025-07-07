@@ -14,6 +14,22 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v4.0.0 (2025-07-08)
+
+#### Breaking Changes
+
+- The action is now ESM ([d9543bd](https://github.com/sibiraj-s/action-eslint/commit/d9543bd))
+- Action runtime updated to Node.js 20 ([5580b04](https://github.com/sibiraj-s/action-eslint/commit/5580b04))
+- Drop `use-npx` option, by default it uses `npx` for `npm` and `pnpm dlx` for `pnpm` ([f7b0bf2](https://github.com/sibiraj-s/action-eslint/commit/f7b0bf2))
+
+#### Features
+
+- Add pnpm support ([f7b0bf2](https://github.com/sibiraj-s/action-eslint/commit/f7b0bf2))
+
+#### Bug Fixes
+
+- Fix exec working directory ([548a14a](https://github.com/sibiraj-s/action-eslint/commit/548a14a))
+
 ## v3.0.1 (2023-08-08)
 
 #### Bug Fixes

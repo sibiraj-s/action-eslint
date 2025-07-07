@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci # or yarn install
-      - uses: sibiraj-s/action-eslint@v3
+      - uses: sibiraj-s/action-eslint@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # optional
           eslint-args: '--ignore-path=.gitignore --quiet'
@@ -42,7 +42,7 @@ Ignore files changed in a PR.
 
 ```yml
 steps:
-  - uses: sibiraj-s/action-eslint@v3
+  - uses: sibiraj-s/action-eslint@v4
     with:
       ignore-path: .eslintignore
       ignore-patterns: |
@@ -58,7 +58,7 @@ You can use this in addition to `ignore-path`/`ignore-patterns` in `eslint-args`
 
 ```yml
 steps:
-  - uses: sibiraj-s/action-eslint@v3
+  - uses: sibiraj-s/action-eslint@v4
     with:
       eslint-args: '--ignore-path=.gitignore --quiet'
       ignore-path: .eslintignore
@@ -73,7 +73,7 @@ The `working-directory` option can be especially useful when the eslint installa
 
 ```yml
 steps:
-  - uses: sibiraj-s/action-eslint@v3
+  - uses: sibiraj-s/action-eslint@v4
     with:
       working-directory: apps/website
 ```
@@ -88,7 +88,7 @@ such as when a change is made to the `.eslintrc` file, where you may want to lin
 
 ```yml
 steps:
-  - uses: sibiraj-s/action-eslint@v3
+  - uses: sibiraj-s/action-eslint@v4
     with:
       all-files: true
 ```
@@ -97,7 +97,7 @@ Note: When using this input, if the `eslint-args` has the `ignore-path` option t
 
 ```yml
 steps:
-  - uses: sibiraj-s/action-eslint@v3
+  - uses: sibiraj-s/action-eslint@v4
     with:
       all-files: true
       eslint-args: '--ignore-path=.gitignore --quiet'
@@ -119,7 +119,7 @@ steps:
   # run eslint on all files if eslintrc changes
   - name: Run eslint on changed files
     if: steps.filter.outputs.eslintrc == 'false'
-    uses: sibiraj-s/action-eslint@v3
+    uses: sibiraj-s/action-eslint@v4
     with:
       all-files: ${{ steps.filter.outputs.eslintrc == 'true' }}
 ```
@@ -130,7 +130,7 @@ The action supports different package managers. You can specify which package ma
 
 ```yml
 steps:
-  - uses: sibiraj-s/action-eslint@v3
+  - uses: sibiraj-s/action-eslint@v4
     with:
       package-manager: 'npm' # or 'pnpm'
 ```
