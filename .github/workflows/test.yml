@@ -17,6 +17,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          # @fixme: https://github.com/nektos/act/issues/989
+          cache: ${{ !env.ACT && 'npm' || '' }}
+
+      - run: npm ci
+      - run: npm ls --depth=0
 
       - uses: ./
         with:
