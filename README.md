@@ -138,3 +138,11 @@ Read more on [using third-party actions](https://docs.github.com/en/actions/lear
 
 To enable debug logs, set secret `ACTIONS_STEP_DEBUG` to `true`. Refer docs more details
 https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging#enabling-step-debug-logging
+
+## Testing
+
+The action can be testing using [act](https://nektosact.com). Run the following command to test the action:
+
+```bash
+act push
+```
