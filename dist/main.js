@@ -20111,8 +20111,9 @@ const getFiles = async () => {
 	const changedFiles = await get_changed_files_default();
 	printItems("Files changed.", changedFiles);
 	const files = await ignore_files_default(changedFiles);
-	printItems("Files for linting", files);
-	return files;
+	const relativeFiles = files.map((file) => path.relative(inputs_default.workingDirectory, file));
+	printItems("Files for linting", relativeFiles);
+	return relativeFiles;
 };
 var get_files_default = getFiles;
 
@@ -20151,12 +20152,13 @@ const runEslint = async () => {
 		return;
 	}
 	const eslintArgs = get_eslint_args_default();
-	const execOptions = [
-		inputs_default.useNpx ? "eslint" : path.resolve(inputs_default.workingDirectory, "node_modules/.bin/eslint"),
+	const execArgs = [
+		inputs_default.useNpx ? "eslint" : "node_modules/.bin/eslint",
 		...files,
 		...eslintArgs
 	].filter(Boolean);
-	await (0, import_exec.exec)(inputs_default.useNpx ? "npx" : "node", execOptions);
+	const execOptions = { cwd: inputs_default.workingDirectory };
+	await (0, import_exec.exec)(inputs_default.useNpx ? "npx" : "node", execArgs, execOptions);
 };
 
 //#endregion
