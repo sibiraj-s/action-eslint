@@ -1,5 +1,4 @@
 import { createRequire } from "node:module";
-import { info } from "console";
 import path from "node:path";
 import fs from "node:fs";
 
@@ -20057,7 +20056,7 @@ var import_core$4 = __toESM$1(require_core(), 1);
 const printItems = (name, items) => {
 	if (items.length === 0) return;
 	(0, import_core$4.startGroup)("Files for linting.");
-	items.forEach((item) => info(`- ${item}`));
+	items.forEach((item) => (0, import_core$4.info)(`- ${item}`));
 	(0, import_core$4.endGroup)();
 };
 

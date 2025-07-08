@@ -1,5 +1,4 @@
-import { endGroup, startGroup } from '@actions/core';
-import { info } from 'console';
+import { endGroup, startGroup, info } from '@actions/core';
 
 export const printItems = (name:string, items: string[]) => {
   if (items.length === 0) {
