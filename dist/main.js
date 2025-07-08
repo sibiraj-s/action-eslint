@@ -20028,22 +20028,19 @@ const getChangedFiles = async () => {
 	const pullRequest = import_github.context.payload.pull_request;
 	let filenames = [];
 	if (!pullRequest?.number) {
-		const getCommitEndpointOptions = octokit.rest.repos.getCommit.endpoint.merge({
+		const response = await octokit.rest.repos.getCommit({
 			owner: import_github.context.repo.owner,
 			repo: import_github.context.repo.repo,
 			ref: import_github.context.sha
 		});
-		const response = await octokit.paginate(getCommitEndpointOptions);
-		const filesArr = response.map((data) => data.files);
-		const filesChangedInCommit = filesArr.reduce((acc, val) => acc?.concat(val || []), []);
-		filenames = getFileNames(filesChangedInCommit);
+		const filesArr = response.data.files ?? [];
+		filenames = getFileNames(filesArr);
 	} else {
-		const listFilesEndpointOptions = octokit.rest.pulls.listFiles.endpoint.merge({
+		const filesChangedInPR = await octokit.paginate(octokit.rest.pulls.listFiles, {
 			owner: import_github.context.repo.owner,
 			repo: import_github.context.repo.repo,
 			pull_number: pullRequest.number
 		});
-		const filesChangedInPR = await octokit.paginate(listFilesEndpointOptions);
 		filenames = getFileNames(filesChangedInPR);
 	}
 	return filenames;

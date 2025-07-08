@@ -1,12 +1,10 @@
 import { getOctokit, context } from '@actions/github';
-import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 
 import { File, FileNamesList } from './types';
 import inputs from './inputs';
 
-const getFileNames = (files: File[]): FileNamesList => files
-  .filter((file) => file.status !== 'removed')
-  .map((file) => file.filename);
+const getFileNames = (files: File[]): FileNamesList =>
+  files.filter((file) => file.status !== 'removed').map((file) => file.filename);
 
 const getChangedFiles = async (): Promise<FileNamesList> => {
   const octokit = getOctokit(inputs.token);
@@ -15,28 +13,19 @@ const getChangedFiles = async (): Promise<FileNamesList> => {
   let filenames: FileNamesList = [];
 
   if (!pullRequest?.number) {
-    const getCommitEndpointOptions = octokit.rest.repos.getCommit.endpoint.merge({
+    const response = await octokit.rest.repos.getCommit({
       owner: context.repo.owner,
       repo: context.repo.repo,
       ref: context.sha,
     });
-
-    type ReposGetCommitResponse = GetResponseDataTypeFromEndpointMethod<typeof octokit.rest.repos.getCommit>;
-    const response: ReposGetCommitResponse[] = await octokit.paginate(getCommitEndpointOptions);
-    const filesArr = response.map((data) => data.files);
-
-    const filesChangedInCommit = filesArr.reduce((acc, val) => acc?.concat(val || []), []);
-
-    filenames = getFileNames(filesChangedInCommit as File[]);
+    const filesArr = response.data.files ?? [];
+    filenames = getFileNames(filesArr as File[]);
   } else {
-    const listFilesEndpointOptions = octokit.rest.pulls.listFiles.endpoint.merge({
+    const filesChangedInPR = await octokit.paginate(octokit.rest.pulls.listFiles, {
       owner: context.repo.owner,
       repo: context.repo.repo,
       pull_number: pullRequest.number,
     });
-
-    type PullsListFilesResponse = GetResponseDataTypeFromEndpointMethod<typeof octokit.rest.pulls.listFiles>;
-    const filesChangedInPR: PullsListFilesResponse = await octokit.paginate(listFilesEndpointOptions);
 
     filenames = getFileNames(filesChangedInPR as File[]);
   }
