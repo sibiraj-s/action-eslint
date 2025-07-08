@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
-    "@types/node": "^22.16.0",
+    "@types/node": "^20.19.4",
     "commitlint-config-non-conventional": "^1.0.1",
     "eslint": "^9.30.1",
     "eslint-config-pegasus": "^6.0.2",
