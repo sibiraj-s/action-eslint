@@ -23,6 +23,7 @@
   ],
   "scripts": {
     "lint": "eslint . --ext js,ts --ignore-path .gitignore",
+    "dev": "tsdown --watch",
     "build": "tsdown",
     "prepare": "is-ci || husky install"
   },
