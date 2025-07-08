@@ -8,10 +8,10 @@ export default pegasus.tsConfig(
     languageOptions: {
       parserOptions: {
         projectService: true,
-      }
-    }
+      },
+    },
   },
   {
-    ignores: ['dist/', 'lib/']
-  }
-)
+    ignores: ['dist/', 'lib/'],
+  },
+);

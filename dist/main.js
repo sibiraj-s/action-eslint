@@ -20053,7 +20053,7 @@ var get_changed_files_default = getChangedFiles;
 //#endregion
 //#region src/print.ts
 var import_core$4 = __toESM$1(require_core(), 1);
-const printItems = (name, items) => {
+const printItems = (_name, items) => {
 	if (items.length === 0) return;
 	(0, import_core$4.startGroup)("Files for linting.");
 	items.forEach((item) => (0, import_core$4.info)(`- ${item}`));
@@ -20407,8 +20407,8 @@ const runEslint = async () => {
 		(0, import_core$1.notice)("No files found. Skipping.");
 		return;
 	}
-	const eslintArgs = get_eslint_args_default();
 	const { command, args } = getExecutionCommand();
+	const eslintArgs = get_eslint_args_default();
 	const execArgs = [
 		...args,
 		...files,

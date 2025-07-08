@@ -31,14 +31,10 @@ export const runEslint = async (): Promise<void> => {
     return;
   }
 
-  const eslintArgs = getEslintArgs();
   const { command, args } = getExecutionCommand();
+  const eslintArgs = getEslintArgs();
 
-  const execArgs = [
-    ...args,
-    ...files,
-    ...eslintArgs,
-  ].filter(Boolean);
+  const execArgs = [...args, ...files, ...eslintArgs].filter(Boolean);
   const execOptions = { cwd: inputs.workingDirectory };
 
   await exec(command, execArgs, execOptions);

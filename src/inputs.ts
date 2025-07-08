@@ -7,7 +7,9 @@ const inputs: Inputs = {
   annotations: getBooleanInput('annotations'),
   eslintArgs: getInput('eslint-args').split(' '),
   workingDirectory: getInput('working-directory'),
-  extensions: getInput('extensions').split(',').map((ext) => ext.trim()),
+  extensions: getInput('extensions')
+    .split(',')
+    .map((ext) => ext.trim()),
   ignorePath: getInput('ignore-path'),
   ignorePatterns: getMultilineInput('ignore-patterns'),
   allFiles: getBooleanInput('all-files'),

@@ -1,6 +1,6 @@
 import { endGroup, startGroup, info } from '@actions/core';
 
-export const printItems = (name:string, items: string[]) => {
+export const printItems = (_name: string, items: string[]) => {
   if (items.length === 0) {
     return;
   }
