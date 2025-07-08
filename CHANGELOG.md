@@ -14,6 +14,13 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v4.0.1 (2025-07-08)
+
+#### Bug Fixes
+
+- fix usage of logger ([502aee5](https://github.com/sibiraj-s/action-eslint/commit/502aee5))
+- fix rest api usage ([6ab9fd68](https://github.com/sibiraj-s/action-eslint/commit/6ab9fd68))
+
 ## v4.0.0 (2025-07-08)
 
 #### Breaking Changes
