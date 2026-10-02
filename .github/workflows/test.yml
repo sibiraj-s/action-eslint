@@ -22,6 +22,7 @@ jobs:
 
       - run: npm ci
       - run: npm ls --depth=0
+      - run: npm test
 
       - uses: ./
         with:

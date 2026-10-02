@@ -1,15 +1,14 @@
 import { getBooleanInput, getInput, getMultilineInput } from '@actions/core';
 
 import { Inputs } from './types';
+import { parseEslintArgs, parseExtensions } from './parse';
 
 const inputs: Inputs = {
   token: getInput('token', { required: true }),
   annotations: getBooleanInput('annotations'),
-  eslintArgs: getInput('eslint-args').split(' '),
+  eslintArgs: parseEslintArgs(getInput('eslint-args')),
   workingDirectory: getInput('working-directory'),
-  extensions: getInput('extensions')
-    .split(',')
-    .map((ext) => ext.trim()),
+  extensions: parseExtensions(getInput('extensions')),
   ignorePath: getInput('ignore-path'),
   ignorePatterns: getMultilineInput('ignore-patterns'),
   allFiles: getBooleanInput('all-files'),

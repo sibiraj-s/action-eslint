@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import path from 'node:path';
 
 import ignore from 'ignore';
 import { notice, startGroup, endGroup, info } from '@actions/core';
@@ -7,18 +8,19 @@ import { FileNamesList } from './types';
 import inputs from './inputs';
 import { resovlePath } from './path';
 
-const filterWorkingDirectoryFiles = (files: FileNamesList) => {
-  if (!inputs.workingDirectory) {
-    return files;
-  }
+// Changed files are repo-relative posix paths; return them relative to the working directory
+const toWorkingDirectoryFiles = (files: FileNamesList): FileNamesList => {
+  const workingDirectory = path.posix.join('/', inputs.workingDirectory);
 
-  return files.filter((file) => file.startsWith(inputs.workingDirectory));
+  return files
+    .map((file) => path.posix.relative(workingDirectory, path.posix.join('/', file)))
+    .filter((file) => file !== '' && file !== '..' && !file.startsWith('../'));
 };
 
 const ignoreFiles = async (changedFiles: FileNamesList): Promise<FileNamesList> => {
   const ig = ignore();
 
-  const files = filterWorkingDirectoryFiles(changedFiles);
+  const files = toWorkingDirectoryFiles(changedFiles);
 
   if (inputs.ignorePath) {
     const ignoreFile = resovlePath(inputs.ignorePath);
@@ -41,10 +43,7 @@ const ignoreFiles = async (changedFiles: FileNamesList): Promise<FileNamesList> 
   }
 
   return files
-    .filter((filename) => {
-      const isFileSupported = inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
-      return isFileSupported;
-    })
+    .filter((filename) => inputs.extensions.some((ext) => filename.endsWith(`.${ext}`)))
     .filter((filename) => !ig.ignores(filename));
 };
 

@@ -7,8 +7,8 @@ import * as path$1 from "path";
 import * as events from "events";
 import * as child from "child_process";
 import { setTimeout as setTimeout$1 } from "timers";
-import path from "node:path";
 import fs from "node:fs";
+import path from "node:path";
 //#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -17196,13 +17196,17 @@ function endGroup() {
 	issue("endgroup");
 }
 //#endregion
+//#region src/parse.ts
+const parseEslintArgs = (value) => value.split(/\s+/).filter(Boolean);
+const parseExtensions = (value) => value.split(",").map((ext) => ext.trim().replace(/^\.+/, "")).filter(Boolean);
+//#endregion
 //#region src/inputs.ts
 const inputs = {
 	token: getInput("token", { required: true }),
 	annotations: getBooleanInput("annotations"),
-	eslintArgs: getInput("eslint-args").split(" "),
+	eslintArgs: parseEslintArgs(getInput("eslint-args")),
 	workingDirectory: getInput("working-directory"),
-	extensions: getInput("extensions").split(",").map((ext) => ext.trim()),
+	extensions: parseExtensions(getInput("extensions")),
 	ignorePath: getInput("ignore-path"),
 	ignorePatterns: getMultilineInput("ignore-patterns"),
 	allFiles: getBooleanInput("all-files"),
@@ -20759,9 +20763,9 @@ const getChangedFiles = async () => {
 };
 //#endregion
 //#region src/print.ts
-const printItems = (_name, items) => {
+const printItems = (name, items) => {
 	if (items.length === 0) return;
-	startGroup("Files for linting.");
+	startGroup(name);
 	items.forEach((item) => info(`- ${item}`));
 	endGroup();
 };
@@ -21323,13 +21327,13 @@ const resovlePath = (pathStr) => {
 };
 //#endregion
 //#region src/ignore-files.ts
-const filterWorkingDirectoryFiles = (files) => {
-	if (!inputs.workingDirectory) return files;
-	return files.filter((file) => file.startsWith(inputs.workingDirectory));
+const toWorkingDirectoryFiles = (files) => {
+	const workingDirectory = path.posix.join("/", inputs.workingDirectory);
+	return files.map((file) => path.posix.relative(workingDirectory, path.posix.join("/", file))).filter((file) => file !== "" && file !== ".." && !file.startsWith("../"));
 };
 const ignoreFiles = async (changedFiles) => {
 	const ig = (0, import_ignore.default)();
-	const files = filterWorkingDirectoryFiles(changedFiles);
+	const files = toWorkingDirectoryFiles(changedFiles);
 	if (inputs.ignorePath) {
 		const ignoreFile = resovlePath(inputs.ignorePath);
 		if (fs.existsSync(ignoreFile)) {
@@ -21344,9 +21348,7 @@ const ignoreFiles = async (changedFiles) => {
 		endGroup();
 		ig.add(inputs.ignorePatterns);
 	}
-	return files.filter((filename) => {
-		return inputs.extensions.find((ext) => filename.endsWith(`.${ext}`));
-	}).filter((filename) => !ig.ignores(filename));
+	return files.filter((filename) => inputs.extensions.some((ext) => filename.endsWith(`.${ext}`))).filter((filename) => !ig.ignores(filename));
 };
 //#endregion
 //#region src/get-files.ts
@@ -21358,9 +21360,9 @@ const getFiles = async () => {
 	info("Linting changed files.");
 	const changedFiles = await getChangedFiles();
 	printItems("Files changed.", changedFiles);
-	const relativeFiles = (await ignoreFiles(changedFiles)).map((file) => path.relative(inputs.workingDirectory, file));
-	printItems("Files for linting", relativeFiles);
-	return relativeFiles;
+	const files = await ignoreFiles(changedFiles);
+	printItems("Files for linting.", files);
+	return files;
 };
 //#endregion
 //#region src/get-eslint-args.ts
