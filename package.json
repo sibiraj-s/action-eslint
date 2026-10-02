@@ -11,7 +11,7 @@
   "main": "lib/main.js",
   "type": "module",
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=24.0.0",
     "npm": ">=10.0.0"
   },
   "keywords": [
@@ -22,28 +22,28 @@
     "ci"
   ],
   "scripts": {
-    "lint": "eslint . --ext js,ts --ignore-path .gitignore",
+    "lint": "eslint .",
     "dev": "tsdown --watch",
     "build": "tsdown",
-    "prepare": "is-ci || husky install"
+    "prepare": "is-ci || husky"
   },
   "dependencies": {
-    "@actions/core": "^1.11.1",
-    "@actions/exec": "^1.1.1",
-    "@actions/github": "^6.0.1",
-    "ignore": "^7.0.5"
+    "@actions/core": "^3.0.1",
+    "@actions/exec": "^3.0.0",
+    "@actions/github": "^9.1.1",
+    "ignore": "^7.0.12"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@types/node": "^20.19.4",
+    "@commitlint/cli": "^21.2.3",
+    "@types/node": "^24.19.1",
     "commitlint-config-non-conventional": "^1.0.1",
-    "eslint": "^9.30.1",
+    "eslint": "^10.11.0",
     "eslint-config-pegasus": "^6.0.2",
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
-    "lint-staged": "^16.1.2",
-    "prettier": "^3.6.2",
-    "tsdown": "^0.12.9",
-    "typescript": "^5.8.3"
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9",
+    "tsdown": "^0.23.0",
+    "typescript": "^5.9.3"
   }
 }
