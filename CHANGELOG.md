@@ -14,6 +14,20 @@ All notable changes to this project will be documented in this file.
 > - Internal
 > - Unreleased
 
+## v4.0.2 (2026-10-02)
+
+#### Bug Fixes
+
+- Fix `working-directory` matching sibling directories with the same prefix ([88643dd](https://github.com/sibiraj-s/action-eslint/commit/88643dd))
+- Apply `ignore-path` and `ignore-patterns` relative to `working-directory` ([88643dd](https://github.com/sibiraj-s/action-eslint/commit/88643dd))
+- Accept `extensions` with a leading dot ([88643dd](https://github.com/sibiraj-s/action-eslint/commit/88643dd))
+- Split `eslint-args` on any whitespace ([88643dd](https://github.com/sibiraj-s/action-eslint/commit/88643dd))
+
+#### Dependency Updates
+
+- Action runtime updated to Node.js 24 ([a5b5490](https://github.com/sibiraj-s/action-eslint/commit/a5b5490))
+- Bump dependencies ([a5b5490](https://github.com/sibiraj-s/action-eslint/commit/a5b5490))
+
 ## v4.0.1 (2025-07-08)
 
 #### Bug Fixes
